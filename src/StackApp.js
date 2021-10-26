@@ -4,7 +4,6 @@ import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
-import Loading from './sections/screens/LoadingScreen';
 import DevicesScreen from './sections/screens/DeviceScreen';
 import DeviceControl from './sections/device/ControlDevice';
 import SettingsDevice from './sections/settings/SettingsDevice';
@@ -40,12 +39,7 @@ function App(props) {
             return <Icon name="back" width="28" height="30" />;
           },
         }}
-        initialRouteName={'Loading'}>
-        <Stack.Screen
-          name="Loading"
-          component={Loading}
-          options={{headerShown: false}}
-        />
+        initialRouteName={'DevicesScreen'}>
         <Stack.Screen
           name="DevicesScreen"
           component={DevicesScreen}

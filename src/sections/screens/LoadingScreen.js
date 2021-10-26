@@ -4,13 +4,6 @@ import {connect} from 'react-redux';
 import Icon from '../../utils/Icon';
 
 const Loading = (props) => {
-  useEffect(() => {
-    // Run! Like go get some data from an API.
-    setTimeout(() => {
-      const {navigation} = props;
-      navigation.navigate('DevicesScreen');
-    }, 1500);
-  });
   return (
     <View
       style={[style.container, {backgroundColor: props.theme.body_background}]}>
