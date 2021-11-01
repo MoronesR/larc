@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Button } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-community/google-signin';
 
 import Login from '../screens/Authentication'
-import Aut from '../screens/Authenticated'
+// import Aut from '../screens/Authenticated'
 import SplashScreen from './sections/screens/LoadingScreen';
-// import StackApp from './StackApp';
+import Drawer from './Drawer'
+
 
 const main = () =>{
   const [authenticated, setAuthenticated] = useState(false);
@@ -26,10 +26,8 @@ const main = () =>{
   async function onGoogleButtonPress() {
     // Get the users ID token
     const { idToken } = await GoogleSignin.signIn();
-
     // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
     // Sign-in the user with the credential
     return auth().signInWithCredential(googleCredential);
   }
@@ -48,8 +46,7 @@ const main = () =>{
     if (!authenticated) {
       return <Login onGoogleButtonPress={onGoogleButtonPress}/>;
     }
-    return <Aut/>;
-
+    return <Drawer/>;
   }
 }
 
