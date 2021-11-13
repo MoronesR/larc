@@ -160,3 +160,11 @@ export const setLanguage = (payLoad) => ({
   type: 'SET_LANGUAGE',
   payLoad,
 });
+
+
+/****************LOGIN********************* */
+
+export const addNewUser = (payLoad) =>({
+  type: 'ADD_NEW_USER',
+  payLoad,
+});

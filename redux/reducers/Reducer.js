@@ -773,7 +773,7 @@ function Reducer(state, action) {
 
     /******************DEVICE******************* */
     case 'ADD_DEVICE':
-      return {
+      return {        
         ...state,
         devices: [
           ...state.devices,
@@ -821,7 +821,16 @@ function Reducer(state, action) {
         ...state,
         currentTheme: action.payLoad,
       };
-
+    /******************LOGIN******************* */
+    case 'ADD_NEW_USER':
+      return{
+        ...state,
+        login:{
+          idSession: action.payLoad.id,
+          session: action.payLoad.session || false,
+          anonymous: action.payLoad.anonymous,
+        }
+      };
     default:
       return state;
   }

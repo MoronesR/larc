@@ -1,55 +1,100 @@
 import React, {useState, useEffect} from 'react';
 import auth from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-community/google-signin';
-
-import Login from '../screens/Authentication'
-// import Aut from '../screens/Authenticated'
+import firebase from '../firebase/db'
+import Login from './sections/screens/Authentication'
 import SplashScreen from './sections/screens/LoadingScreen';
 import Drawer from './Drawer'
+import {connect} from 'react-redux';
+import {addNewUser} from '../Actions'
 
-
-const main = () =>{
-  const [authenticated, setAuthenticated] = useState(false);
+const main = (props) =>{
   const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '123956583858-3r1c7f1s2nh1l8fqi6eivjs9amofov33.apps.googleusercontent.com',
-    });
-
     setTimeout(() => {
       setisLoading(false);
     }, 2000);
   },[]);
 
-  async function onGoogleButtonPress() {
-    // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn();
-    // Create a Google credential with the token
+  const onGoogleButtonPress = async() => {
+    try {
+    const { idToken } = await firebase.GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
+    auth().signInWithCredential(googleCredential)
+    .then((result) => {
+      saveNewUser();
+    }) 
+    } catch (error) {
+      if (error.code === firebase.statusCodes.SIGN_IN_CANCELLED) {
+        console.info('user cancelled the login flow')
+      } else if (error.code === firebase.statusCodes.IN_PROGRESS) {
+        console.info('operation is in progress already')
+      } else if (error.code === firebase.statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.info('play services not available or outdated')
+      } else if(error.code === '7' ){
+        console.warn('Error network')
+      }else{
+        console.warn('some other error happened')
+      }
+    }
+  }
+
+  const onAnonymousPress = async() => {
+    auth()
+    .signInAnonymously()
+    .then(() => {
+      console.log('User signed in anonymously');
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+
+  const saveNewUser = async() =>{
+    const dataUser = auth().currentUser;
+    await firebase.db.collection('User')
+    .doc(dataUser.uid)
+    .set({
+      name: dataUser.displayName,
+      email: dataUser.email,
+      verified: false
+    })
   }
 
   auth().onAuthStateChanged((user) => {
     if (user) {
-      setAuthenticated(true);
+      props.addNewUser({
+        id: auth().currentUser.uid,
+        session: true,
+        anonymous: auth().currentUser.isAnonymous
+      })
     } else {
-      setAuthenticated(false);
+      props.addNewUser({
+        id: null,
+        session: false,
+        anonymous: false
+      })
     }
   });
 
   if (isLoading) {
     return <SplashScreen />;
   }else{
-    if (!authenticated) {
-      return <Login onGoogleButtonPress={onGoogleButtonPress}/>;
+    if (!props.authenticated) {
+      return <Login onGoogleButtonPress={onGoogleButtonPress} onAnonymousPress={onAnonymousPress}/>;
     }
     return <Drawer/>;
   }
 }
 
-export default main;
+const mapStateToProps = (state) => {
+  return {authenticated: state.login.session}
+}
+
+const mapDispatchToProps = {
+  addNewUser,
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(main);
 
 

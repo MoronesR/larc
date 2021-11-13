@@ -1,4 +1,9 @@
-const state = {
+const initState = {
+  login:{
+    idSession: null,
+    session: false,
+    anonymous: false,
+  },
   currentTheme: 'dark',
   currentLanguage: 'esp',
   themes: {
@@ -45,7 +50,7 @@ const state = {
       version_color: '#FCFCFC',
     },
     light: {
-      header_background: '#FDDB3A',
+      header_background: '#f5dd4b', //
       header_title: '#41444B',
       body_background: '#F6F4E6',
       body_background_isSuspended: '#9E9E9E',
@@ -872,4 +877,4 @@ const state = {
   },
 };
 
-export default state;
+export default initState;

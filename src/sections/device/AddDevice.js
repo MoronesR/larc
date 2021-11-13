@@ -8,7 +8,6 @@ import {View, Text, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {addNewDevice} from '../../../Actions';
 import Toast from 'react-native-simple-toast';
-import {State} from 'react-native-gesture-handler';
 
 const AddDevice = (props) => {
   const [state, set] = useState({
@@ -24,8 +23,6 @@ const AddDevice = (props) => {
       (device) => device.phoneNumber == phoneNumber,
     );
     if (exists) {
-      return false;
-    } else {
       return true;
     }
   };
@@ -35,7 +32,7 @@ const AddDevice = (props) => {
         if (state.phoneNumber.length !== 10) {
           Toast.show(props.general_screen.missing_numbers_label);
         } else {
-          if (isAvailable(state.phoneNumber)) {
+          if (!isAvailable(state.phoneNumber)) {
             props.addNewDevice({
               name: state.name,
               phoneNumber: state.phoneNumber,
@@ -190,9 +187,11 @@ const style = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
+    //design
     theme: state.themes[state.currentTheme],
     device_screen: state.screens.device[state.currentLanguage],
     general_screen: state.screens.general[state.currentLanguage],
+    //code back
     devices: state.devices,
   };
 };

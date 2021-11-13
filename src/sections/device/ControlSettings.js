@@ -110,20 +110,9 @@ const overlayStyle = StyleSheet.create({
 const style = StyleSheet.create({
   container: {
     width: '100%',
-    height: 80,
-    paddingHorizontal: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: 'column',
   },
-  container_control: {
-    width: '46%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    marginHorizontal: 10,
-  },
+ 
   text: {
     fontSize: 16,
     fontWeight: 'bold',
