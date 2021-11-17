@@ -11,7 +11,9 @@ const ButtonGroupCustumized = (props) => {
       buttons={props.buttons}
       containerStyle={[
         props.containerStyle,
-        {height: parseFloat(props.height) || 50},
+        {height: parseFloat(props.height) || 50,
+          backgroundColor: props.theme.settings_button_group_background_selected},
+        
       ]}
       textStyle={[
         {
@@ -20,15 +22,13 @@ const ButtonGroupCustumized = (props) => {
         props.textStyle,
       ]}
       buttonStyle={{
-        backgroundColor: props.theme.body_background,
-        borderColor: props.theme.settings_button_group_border,
-        borderWidth: 0.3,
+        backgroundColor: props.theme.body_background, 
       }}
       selectedButtonStyle={{
-        backgroundColor: props.theme.settings_button_group_background_selected,
+        backgroundColor: props.theme.items_drawer,
       }}
       selectedTextStyle={{
-        color: props.theme.settings_button_group_title,
+        color: props.theme.overlay_button_regular,
         fontWeight: 'bold',
       }}
     />

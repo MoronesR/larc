@@ -1,6 +1,6 @@
 const images = {
   dark: {
-    logo: require('./images/light_larc.png'),
+    logo: require('./images/dark_larc.png'),
     profile: require('./images/dark_default.png'),
     back: require('./images/dark_back.png'),
     delete: require('./images/dark_delete.png'),
@@ -20,6 +20,7 @@ const images = {
     help: require('./images/dark_help.png'),
     group: require('./images/dark_group.png'),
     google_icon: require('./images/google_original_logo_icon_.png'),
+    anonymous:require('./images/anonymous_user.png'),
   },
   light: {
     logo: require('./images/light_larc.png'),
@@ -42,6 +43,7 @@ const images = {
     help: require('./images/light_help.png'),
     group: require('./images/light_group.png'),
     google_icon: require('./images/google_original_logo_icon_.png'),
+    anonymous:require('./images/anonymous_user.png'),
   },
 };
 

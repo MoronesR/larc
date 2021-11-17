@@ -10,7 +10,6 @@ const Icon = (props) => {
         {
           width: parseInt(props.width) || 100,
           height: parseInt(props.height) || 100,
-          resizeMode: 'contain',
         },
         props.style,
       ]}

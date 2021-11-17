@@ -2,17 +2,17 @@ import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, Image, ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import Icon from '../../utils/Icon';
+import Spinner from 'react-native-spinkit';
 
 const Loading = (props) => {
   return (
     <View
       style={[style.container, {backgroundColor: props.theme.body_background}]}>
-      <Icon style={style.img} name="logo" />
+        <View style={{ flex:2, justifyContent: 'center'}}>
+        <Icon style={style.img} name="logo"/>
+        </View>      
       <View style={style.container2}>
-        <ActivityIndicator color={props.theme.header_title} size="large" />
-        <Text style={[style.title, {color: props.theme.header_title}]}>
-          {props.title}
-        </Text>
+      <Spinner type={'ThreeBounce'} size={60} color={props.theme.device_list_title}/>
       </View>
     </View>
   );
@@ -24,12 +24,12 @@ const style = StyleSheet.create({
     paddingHorizontal: 50,
   },
   container2: {
-    width: '100%',
-    paddingTop: 80,
-    justifyContent: 'center',
+    flex:1,
     alignItems: 'center',
+    justifyContent: 'flex-end'
   },
   img: {
+    
     width: '100%',
     height: 250,
     resizeMode: 'contain',
@@ -43,7 +43,6 @@ const style = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     theme: state.themes[state.currentTheme],
-    title: state.loading[state.currentLanguage],
   };
 };
 export default connect(mapStateToProps)(Loading);

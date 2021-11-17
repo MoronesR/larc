@@ -47,8 +47,8 @@ class ControlSettings extends Component {
       <View
         style={[
           style.container,
-          {backgroundColor: this.props.theme.body_background},
         ]}>
+        {/* tema */}
         <View style={style.container_control}>
           <Text style={[style.text, {color: this.props.theme.header_title}]}>
             {this.props.screen.dark_mode}
@@ -59,8 +59,10 @@ class ControlSettings extends Component {
             ios_backgroundColor="#3e3e3e"
             onValueChange={this.setTheme}
             value={this.isDarkMode}
+            style={{ marginEnd: 10}}
           />
         </View>
+        {/* idioma */}
         <View style={style.container_control}>
           <Text style={[style.text, {color: this.props.theme.header_title}]}>
             {this.props.screen.language}
@@ -70,7 +72,7 @@ class ControlSettings extends Component {
             index={this.selectedLanguage}
             buttons={this.availableLanguages}
             containerStyle={{width: 100}}
-            textStyle={{fontSize: 10}}
+            textStyle={{fontSize: 12}}
             height={45}
           />
         </View>
@@ -109,14 +111,15 @@ const overlayStyle = StyleSheet.create({
 
 const style = StyleSheet.create({
   container: {
-    width: '100%',
-    flexDirection: 'column',
+    paddingTop: 20,
+    flex:1
   },
- 
+  container_control:{
+    flexDirection: 'row', justifyContent: 'space-between',alignItems: 'center',
+    paddingBottom:20,
+  }, 
   text: {
     fontSize: 16,
-    fontWeight: 'bold',
-    marginHorizontal: 2,
   },
 });
 

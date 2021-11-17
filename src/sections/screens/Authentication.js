@@ -29,8 +29,8 @@ const Authentication = (props) => {
               }]}
               onPress={() => props.onAnonymousPress()}
             >
-            <FontAwesome5 name={'user-secret'}  style={styles.button_icon}/>
-            <Text style={styles.button_text}>Log In anonymous</Text>
+            <FontAwesome5 name={'user-secret'}  style={[styles.button_icon,{color:props.theme.device_list_title}]}/>
+            <Text style={[styles.button_text,{color:props.theme.device_list_title}]}>Log In anonymous</Text>
         </TouchableOpacity>
       </View>
      </View>

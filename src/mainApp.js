@@ -18,12 +18,12 @@ const main = (props) =>{
 
   const onGoogleButtonPress = async() => {
     try {
-    const { idToken } = await firebase.GoogleSignin.signIn();
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    auth().signInWithCredential(googleCredential)
-    .then((result) => {
-      saveNewUser();
-    }) 
+      const { idToken } = await firebase.GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      auth().signInWithCredential(googleCredential)
+      .then((result) => {
+        saveNewUser();
+      }) 
     } catch (error) {
       if (error.code === firebase.statusCodes.SIGN_IN_CANCELLED) {
         console.info('user cancelled the login flow')
@@ -34,7 +34,7 @@ const main = (props) =>{
       } else if(error.code === '7' ){
         console.warn('Error network')
       }else{
-        console.warn('some other error happened')
+        console.warn('some other error happened', error.code)
       }
     }
   }

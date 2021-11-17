@@ -48,6 +48,7 @@ const initState = {
       switch_background: '#f5dd4b',
       company_name_color: '#BC4343',
       version_color: '#FCFCFC',
+      items_drawer: 'rgba(255,255,255,.29)',
     },
     light: {
       header_background: '#f5dd4b', //
@@ -90,6 +91,7 @@ const initState = {
       switch_background: '#f4f3f4',
       company_name_color: '#52575D',
       version_color: '#41444B',
+      items_drawer: 'rgba(15,7,7,.60)',
     },
   },
   device_default: {
