@@ -7,10 +7,14 @@ import {FlatList, View, StyleSheet, Text} from 'react-native';
 import {connect} from 'react-redux';
 import ListItem from './ListItem';
 import Separator from '../../utils/horizontalPaddingSeparator';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {color} from 'react-native-reanimated';
+import Spinner from 'react-native-spinkit';
+import {deviceListFb} from '../../../Actions'
+
 class ListaDispositivos extends Component {
+  constructor(props) {
+    super(props);
+    this.props.deviceListFb(this.props.user.email);
+  }
   renderItem({item}) {
     return (
       <ListItem
@@ -18,6 +22,7 @@ class ListaDispositivos extends Component {
         theme={this.props.theme}
         screen={this.props.overlay_Screen}
         item={{
+          id: item.id,
           phoneNumber: item.phoneNumber,
           name: item.name,
         }}
@@ -27,9 +32,11 @@ class ListaDispositivos extends Component {
   keyExtractor(item) {
     return item.phoneNumber + item.name;
   }
+  // separador entre los item
   renderSeparator() {
     return <Separator />;
   }
+  //cuendo la lista esta vacia se mostrara este mensaje
   renderEmptyComponent() {
     return (
       <View style={style.emptyContainer}>
@@ -47,7 +54,7 @@ class ListaDispositivos extends Component {
           style.container,
           {backgroundColor: this.props.theme.body_background},
         ]}>
-        <View style={style.flatList_container}>
+        <View style={style.flatList_container}>  
           <FlatList
             keyExtractor={this.keyExtractor}
             data={this.props.device_list}
@@ -67,6 +74,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
   flatList_container: {
+    alignItems: 'center',
     width: '90%',
     paddingVertical: 20,
   },
@@ -84,6 +92,13 @@ const mapStateToProps = (state) => {
     theme: state.themes[state.currentTheme],
     overlay_Screen: state.screens.device[state.currentLanguage],
     general: state.screens.general[state.currentLanguage],
+    user: state.login,
   };
 };
-export default connect(mapStateToProps)(ListaDispositivos);
+
+const mapDispatchToProps = (dispatch) =>{
+  return{
+    deviceListFb: (a) =>{ dispatch(deviceListFb(a))}
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(ListaDispositivos);

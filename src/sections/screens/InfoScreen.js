@@ -47,7 +47,7 @@ class InfoScreen extends Component {
                   color: this.props.theme.company_name_color,
                 },
               ]}>
-              LARC GSM ACCESS
+              {this.props.nameCompany}
             </Text>
             <Text
               style={[
@@ -56,7 +56,7 @@ class InfoScreen extends Component {
                   color: this.props.theme.version_color,
                 },
               ]}>
-              Version: 1.0.0
+              Version: {this.props.versionApp}
             </Text>
           </View>
         </View>
@@ -173,6 +173,8 @@ const style = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     theme: state.themes[state.currentTheme],
+    nameCompany:state.nameCompany,
+    versionApp:state.versionApp,
   };
 };
 export default connect(mapStateToProps)(InfoScreen);

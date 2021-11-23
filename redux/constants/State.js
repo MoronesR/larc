@@ -1,4 +1,7 @@
 const initState = {
+  nameApp: 'LARC',
+  versionApp: '2.0.0',
+  nameCompany: 'LARC GSM ACCESS',
   login:{
     idSession: null,
     session: false,
@@ -91,7 +94,7 @@ const initState = {
       switch_background: '#f4f3f4',
       company_name_color: '#52575D',
       version_color: '#41444B',
-      items_drawer: 'rgba(15,7,7,.60)',
+      items_drawer: 'rgba(15,7,7,.30)',
     },
   },
   device_default: {

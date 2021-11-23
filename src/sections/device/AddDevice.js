@@ -4,9 +4,9 @@ ademas despues de confirmarlo este se debe agregar ala memoria
 */
 import React, {useState} from 'react';
 import {Button, Overlay, Input} from 'react-native-elements';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import {addNewDevice} from '../../../Actions';
+import {addNewDeviceFb} from '../../../Actions';
 import Toast from 'react-native-simple-toast';
 
 const AddDevice = (props) => {
@@ -33,7 +33,8 @@ const AddDevice = (props) => {
           Toast.show(props.general_screen.missing_numbers_label);
         } else {
           if (!isAvailable(state.phoneNumber)) {
-            props.addNewDevice({
+            props.addNewDeviceFb({
+              author: props.user.email,
               name: state.name,
               phoneNumber: state.phoneNumber,
             });
@@ -54,18 +55,24 @@ const AddDevice = (props) => {
   };
   return (
     <View
-      style={{
-        backgroundColor: props.theme.device_add_background,
-      }}>
-      <Button
-        title={props.device_screen.add}
-        buttonStyle={{
-          backgroundColor: props.theme.device_add_background,
-        }}
-        titleStyle={{color: props.theme.device_add_title}}
+    style={{
+      alignItems:'center',
+      justifyContent:'center',
+      paddingBottom: 20,
+      backgroundColor:props.theme.body_background,
+    }}>
+      <TouchableOpacity
         onPress={toggleOverlay}
-      />
-
+        style={{
+            alignItems:'center',
+            justifyContent:'center',
+            width:'90%',
+            padding:15,
+            backgroundColor: props.theme.device_add_background,
+            borderRadius:100,
+        }}>
+        <Text style={{color: props.theme.device_add_title}}>{props.device_screen.add}</Text>
+      </TouchableOpacity>
       <Overlay
         overlayStyle={[
           style.Overlay,
@@ -193,9 +200,10 @@ const mapStateToProps = (state) => {
     general_screen: state.screens.general[state.currentLanguage],
     //code back
     devices: state.devices,
+    user: state.login,
   };
 };
 const mapDispatchToProps = {
-  addNewDevice,
+  addNewDeviceFb,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AddDevice);

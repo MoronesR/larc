@@ -4,12 +4,13 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {store, persistor} from './redux/store/index';
 //main
 import MainApp from './src/MainApp';
+// import MainApp from './helpState';
 
 const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <MainApp/>
+          <MainApp/>
       </PersistGate>
     </Provider>
   );

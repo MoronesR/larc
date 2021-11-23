@@ -1,3 +1,5 @@
+import firebase from './firebase/db'
+
 export const setCurrentChannel = (payLoad) => ({
   type: 'SET_CURRENT_CHANNEL',
   payLoad,
@@ -99,12 +101,10 @@ export const setCalendarIndex = (payLoad) => ({
   type: 'SET_CALENDAR_INDEX',
   payLoad,
 });
-
 export const deleteContact = (payLoad) => ({
   type: 'DELETE_CONTACT',
   payLoad,
 });
-
 export const suspendContact = (payLoad) => ({
   type: 'SUSPEND_CONTACT',
   payLoad,
@@ -113,17 +113,14 @@ export const activateContact = (payLoad) => ({
   type: 'ACTIVATE_CONTACT',
   payLoad,
 });
-
 export const editContact = (payLoad) => ({
   type: 'EDIT_CONTACT',
   payLoad,
 });
-
 export const addContact = (payLoad) => ({
   type: 'ADD_CONTACT',
   payLoad,
 });
-
 /****************GROUP********************* */
 export const addGroup = (payLoad) => ({
   type: 'ADD_GROUP',
@@ -138,20 +135,59 @@ export const deleteGroup = (payLoad) => ({
   payLoad,
 });
 /****************DEVICE********************* */
+//get all devices from firebase
+export const deviceListFb = (payLoad) =>{
+  return function(dispatch) {  
+    firebase.db.collection('datos')
+    .where("author", "==", payLoad)
+    .onSnapshot((querySnapshot)=>{
+      const datos = [];
+      querySnapshot.docs.forEach((doc) =>{
+          const {name, phoneNumber } = doc.data()
+          datos.push({
+           id:doc.id, name, phoneNumber
+          })
+      })
+      dispatch(addNewDevice(datos))
+    })
+  };
+};
+// add device to state
 export const addNewDevice = (payLoad) => ({
   type: 'ADD_DEVICE',
   payLoad,
 });
-
+//add device to firebase
+export const addNewDeviceFb = (payLoad) =>{
+  return async function(dispatch) {    
+    await firebase.db.collection('datos').add(payLoad);
+  };
+};
 export const deleteDevice = (payLoad) => ({
   type: 'DELETE_DEVICE',
   payLoad,
 });
-
+//delete device from fb
+export const deleteDeviceFb = (payLoad) => {
+  return async function(dispatch) {    
+    await firebase.db.collection('datos').doc(payLoad.id).delete();
+  };
+};
 export const editDevice = (payLoad) => ({
   type: 'EDIT_DEVICE',
   payLoad,
 });
+//edit device to fb
+export const editDeviceFb = (payLoad) => {
+  return async function(dispatch) {    
+    await firebase.db.collection('datos').doc(payLoad.id).set({
+      author:payLoad.author,
+      name: payLoad.nameEdit,
+      phoneNumber: payLoad.phoneEdit
+    })
+  };
+};
+/****************THEME********************* */
 export const setTheme = (payLoad) => ({
   type: 'SET_THEME',
   payLoad,
@@ -160,10 +196,7 @@ export const setLanguage = (payLoad) => ({
   type: 'SET_LANGUAGE',
   payLoad,
 });
-
-
 /****************LOGIN********************* */
-
 export const addNewUser = (payLoad) =>({
   type: 'ADD_NEW_USER',
   payLoad,

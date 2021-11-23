@@ -16,6 +16,7 @@ const main = (props) =>{
     }, 2000);
   },[]);
 
+  //login google or anonymous
   const onGoogleButtonPress = async() => {
     try {
       const { idToken } = await firebase.GoogleSignin.signIn();
@@ -38,7 +39,6 @@ const main = (props) =>{
       }
     }
   }
-
   const onAnonymousPress = async() => {
     auth()
     .signInAnonymously()
@@ -53,11 +53,10 @@ const main = (props) =>{
   const saveNewUser = async() =>{
     const dataUser = auth().currentUser;
     await firebase.db.collection('User')
-    .doc(dataUser.uid)
+    .doc(dataUser.email)
     .set({
       name: dataUser.displayName,
-      email: dataUser.email,
-      verified: false
+      email: dataUser.email
     })
   }
 
@@ -65,6 +64,8 @@ const main = (props) =>{
     if (user) {
       props.addNewUser({
         id: auth().currentUser.uid,
+        email: auth().currentUser.email,
+        name: auth().currentUser.displayName,
         session: true,
         anonymous: auth().currentUser.isAnonymous
       })

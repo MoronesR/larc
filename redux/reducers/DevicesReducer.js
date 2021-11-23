@@ -1,4 +1,5 @@
-function Reducer(state, action) {
+
+function devicesReducer(state , action) {
   switch (action.type) {
     case 'SET_CURRENT_CHANNEL':
       return {
@@ -723,7 +724,7 @@ function Reducer(state, action) {
           }
         }),
       };
-      case 'EDIT_GROUP':
+    case 'EDIT_GROUP':
       return {
         ...state,
         devices: state.devices.map((device) => {
@@ -775,14 +776,7 @@ function Reducer(state, action) {
     case 'ADD_DEVICE':
       return {        
         ...state,
-        devices: [
-          ...state.devices,
-          {
-            ...state.device_default,
-            name: action.payLoad.name,
-            phoneNumber: action.payLoad.phoneNumber,
-          },
-        ],
+        devices: action.payLoad,
       };
     case 'DELETE_DEVICE':
       return {
@@ -829,10 +823,12 @@ function Reducer(state, action) {
           idSession: action.payLoad.id,
           session: action.payLoad.session || false,
           anonymous: action.payLoad.anonymous,
+          email: action.payLoad.email,
+          name: action.payLoad.name,
         }
       };
     default:
       return state;
   }
 }
-export default Reducer;
+export default devicesReducer;

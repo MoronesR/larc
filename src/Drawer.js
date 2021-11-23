@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem,DrawerItemList } from '@react-navigation/drawer';
-import StackApp from './StackApp';
-import InfoScreen from './sections/screens/InfoScreen';
 import {View,Text,Image,StyleSheet} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ControlSettings from './sections/device/ControlSettings';
+import StackInfo from './StackInfo';
+import StackApp from './StackApp';
+
 import {connect} from 'react-redux';
 
 const Drawer = createDrawerNavigator();
@@ -63,8 +64,7 @@ const MyDrawer = (prop) => {
         drawerContent={props => <DrawerContent {...props} style={prop} />}
         drawerContentOptions={{
           inactiveTintColor: prop.theme.device_list_title,
-          activeTintColor: prop.theme.header_title,
-          
+          activeTintColor: prop.theme.device_add_title,
           activeBackgroundColor: prop.theme.items_drawer,
           labelStyle: { fontSize:16 }
         }}
@@ -75,7 +75,7 @@ const MyDrawer = (prop) => {
             drawerIcon: ({color, size}) => <FontAwesome5 name={'home'} size={size} color={color}/>
           }}/>
         <Drawer.Screen name="Infomation" 
-        component={InfoScreen}
+        component={StackInfo}
         options={{   
           drawerIcon: ({color, size}) => <FontAwesome5 name={'info-circle'} size={size} color={color} />
         }}/>       

@@ -348,7 +348,6 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
-
 const mapStateToProps = (state) => {
   return {
     state: state,

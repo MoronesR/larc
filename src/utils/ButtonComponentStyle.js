@@ -12,7 +12,8 @@ const ButtonGroupCustumized = (props) => {
       containerStyle={[
         props.containerStyle,
         {height: parseFloat(props.height) || 50,
-          backgroundColor: props.theme.settings_button_group_background_selected},
+          backgroundColor: props.theme.settings_button_group_background_selected,
+        borderWidth:0,},
         
       ]}
       textStyle={[

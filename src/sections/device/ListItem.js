@@ -2,7 +2,7 @@ import React, {useState, Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {connect} from 'react-redux';
-import {deleteDevice} from '../../../Actions';
+import {deleteDeviceFb} from '../../../Actions';
 import Icon from '../../utils/Icon';
 
 class ListItem extends Component {
@@ -27,7 +27,8 @@ class ListItem extends Component {
         {
           text: this.props.screen.alerts.add_confirm_label,
           onPress: () => {
-            this.props.deleteDevice({
+            this.props.deleteDeviceFb({
+              id: this.props.item.id,
               phoneNumber: this.props.item.phoneNumber,
             });
             Toast.show(this.props.screen.toasts.delete);
@@ -82,6 +83,7 @@ class ListItem extends Component {
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.navigate('EditDevice', {
+                id: this.props.item.id,
                 phoneNumber: this.props.item.phoneNumber,
                 name: this.props.item.name,
               })
@@ -134,6 +136,6 @@ const style = StyleSheet.create({
 });
 
 const mapDispatchToProps = {
-  deleteDevice,
+  deleteDeviceFb,
 };
 export default connect(null, mapDispatchToProps)(ListItem);

@@ -14,5 +14,4 @@ GoogleSignin.configure({
       GoogleSignin,
       statusCodes,
       firebase,
-      db
-  }
+      db}

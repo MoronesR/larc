@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import {Button, Overlay, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import {connect} from 'react-redux';
-import {editDevice} from '../../../Actions';
+import {editDeviceFb} from '../../../Actions';
 class EditDevice extends Component {
   constructor() {
     super();
@@ -26,20 +26,33 @@ class EditDevice extends Component {
     }
     return false;
   }
+
+isAvailable(phoneNumber){
+    const exists = this.props.devices.find(
+      (device) => device.phoneNumber == phoneNumber,
+    );
+    if (exists) {
+      return true;
+    }
+  };
   handleEditDevice = () => {
     if (this.verifyEmptyValues()) {
       if (this.state.phoneEdit.length !== 10) {
         Toast.show(this.props.screen_general.missing_numbers_label);
       } else {
         if (this.state.phoneEdit.match(/^[0-9]+$/)) {
-          this.props.editDevice({
-            phoneNumber: this.props.route.params.phoneNumber,
-            name: this.props.route.params.name,
-            phoneEdit: this.state.phoneEdit,
-            nameEdit: this.state.nameEdit,
-          });
-          Toast.show(this.props.screen.toasts.edit);
-          this.goBack();
+          if (!this.isAvailable(this.state.phoneEdit)) {
+               this.props.editDeviceFb({
+                id: this.props.route.params.id,
+                author: this.props.user.email,
+                phoneEdit: this.state.phoneEdit,
+                nameEdit: this.state.nameEdit,
+              });
+              Toast.show(this.props.screen.toasts.edit);
+              this.goBack();
+          }else{
+            Toast.show(this.props.device_screen.toasts.add_repitation);
+          }
         } else {
           Toast.show(this.props.screen.toasts.only_numbers);
         }
@@ -185,13 +198,16 @@ const styles = StyleSheet.create({
   },
 });
 const mapDispatchToProps = {
-  editDevice,
+  editDeviceFb,
 };
 const mapStateToProps = (state) => {
   return {
     theme: state.themes[state.currentTheme],
     screen: state.screens.device[state.currentLanguage],
     screen_general: state.screens.general[state.currentLanguage],
+    devices: state.devices,
+    device_screen: state.screens.device[state.currentLanguage],
+    user: state.login,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(EditDevice);
