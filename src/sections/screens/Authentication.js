@@ -6,22 +6,23 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 
 const Authentication = (props) => {
+  console.log(props.login_titles);
   return (
     <View style={[styles.container, {backgroundColor: props.theme.header_background}]}>
       <View style={[styles.header, {backgroundColor: props.theme.body_background}]}>
         <Icon style={styles.icon} name="logo" width='180' height='180'/>
+        {/* <Text style={[styles.welcome,{fontSize: 30, fontWeight: 'bold', color: props.theme.settings_button_group_background_selected}]}>{props.login_titles.welcome}</Text> */}
       </View>
       <View style={[styles.footer, {backgroundColor: props.theme.header_background}]}>
-        <Text style={{fontSize: 30, fontWeight: 'bold', color: props.theme.header_title}}>Log In</Text>
-        {/* <GoogleSigninButton style={[styles.button]} onPress={} /> */}
+        <Text style={{fontSize: 25, fontWeight: 'bold', color: props.theme.header_title}}>{props.login_titles.logIn}</Text>
         <TouchableOpacity
               style={styles.button}
               onPress={props.onGoogleButtonPress}
             >
             <Icon  style={{ marginLeft:10, marginRight:20}} name="google_icon" width='30' height='30'/>
-            <Text style={styles.button_text}>Log In With Google</Text>
+            <Text style={styles.button_text}>{props.login_titles.button_Google}</Text>
         </TouchableOpacity>
-        <Text style={{fontSize: 20,fontWeight: 'bold', color: props.theme.header_title}}>Or</Text>
+        <Text style={{fontSize: 20,fontWeight: 'bold', color: props.theme.header_title}}>{props.login_titles.else}</Text>
         <TouchableOpacity
               style={[styles.button, {
                 backgroundColor: props.theme.settings_button_group_background_selected,
@@ -30,7 +31,7 @@ const Authentication = (props) => {
               onPress={() => props.onAnonymousPress()}
             >
             <FontAwesome5 name={'user-secret'}  style={[styles.button_icon,{color:props.theme.device_list_title}]}/>
-            <Text style={[styles.button_text,{color:props.theme.device_list_title}]}>Log In anonymous</Text>
+            <Text style={[styles.button_text,{color:props.theme.device_list_title}]}>{props.login_titles.button_Anonymous}</Text>
         </TouchableOpacity>
       </View>
      </View>
@@ -81,6 +82,11 @@ const styles = StyleSheet.create({
     fontSize:20,
     marginRight: 20,
     color: '#000000'
+  },
+  welcome:{
+    position:'absolute',
+    bottom:0,
+    left: 10
   }
 });
 
@@ -88,8 +94,7 @@ const mapStateToProps = (state) => {
   return {
     //design    
     theme: state.themes[state.currentTheme],
-    device_screen: state.screens.device[state.currentLanguage],
-    general_screen: state.screens.general[state.currentLanguage],
+    login_titles: state.screens.login[state.currentLanguage],
   };
 };
 

@@ -12,7 +12,7 @@ const ButtonGroupCustumized = (props) => {
       containerStyle={[
         props.containerStyle,
         {height: parseFloat(props.height) || 50,
-          backgroundColor: props.theme.settings_button_group_background_selected,
+        backgroundColor: props.theme.settings_button_group_background_selected,
         borderWidth:0,},
         
       ]}
@@ -24,6 +24,8 @@ const ButtonGroupCustumized = (props) => {
       ]}
       buttonStyle={{
         backgroundColor: props.theme.body_background, 
+        borderColor: props.theme.settings_button_group_border,
+        borderWidth: 0.5,
       }}
       selectedButtonStyle={{
         backgroundColor: props.theme.items_drawer,

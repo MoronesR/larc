@@ -4,6 +4,7 @@ import Toast from 'react-native-simple-toast';
 import {connect} from 'react-redux';
 import {deleteDeviceFb} from '../../../Actions';
 import Icon from '../../utils/Icon';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 class ListItem extends Component {
   constructor() {
@@ -78,7 +79,7 @@ class ListItem extends Component {
           <TouchableOpacity
             onPress={this.handleDeleteDevice}
             style={style.icon}>
-            <Icon width={this.width} height={this.height} name="delete" />
+             <FontAwesome5 name={'trash-alt'} size={25} style={{color:this.props.theme.device_list_title}}/>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
@@ -89,7 +90,8 @@ class ListItem extends Component {
               })
             }
             style={style.icon}>
-            <Icon width={this.width} height={this.height} name="edit" />
+              <FontAwesome5 name={'edit'} size={25} style={{color:this.props.theme.device_list_title}} />
+              {/**/}
           </TouchableOpacity>
         </View>
       </View>
@@ -131,11 +133,17 @@ const style = StyleSheet.create({
     width: '25%',
   },
   icon: {
-    paddingHorizontal: 7,
+    paddingRight:20,
   },
 });
 
 const mapDispatchToProps = {
   deleteDeviceFb,
 };
-export default connect(null, mapDispatchToProps)(ListItem);
+const mapStateToProps = (state) => {
+  return {
+    //design    
+    theme: state.themes[state.currentTheme],
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ListItem);

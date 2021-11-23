@@ -773,6 +773,11 @@ function devicesReducer(state , action) {
       };
 
     /******************DEVICE******************* */
+    case 'LOAD_DATA':
+      return {        
+        ...state,
+        loadData: action.payLoad,
+      };
     case 'ADD_DEVICE':
       return {        
         ...state,
@@ -785,7 +790,6 @@ function devicesReducer(state , action) {
           (device) => device.phoneNumber !== action.payLoad.phoneNumber,
         ),
       };
-
     case 'EDIT_DEVICE':
       return {
         ...state,

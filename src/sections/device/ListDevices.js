@@ -54,6 +54,7 @@ class ListaDispositivos extends Component {
           style.container,
           {backgroundColor: this.props.theme.body_background},
         ]}>
+        <Spinner style={{ marginTop: 20}} type="FadingCircleAlt" color={this.props.theme.header_title} isVisible={this.props.loadData}/>
         <View style={style.flatList_container}>  
           <FlatList
             keyExtractor={this.keyExtractor}
@@ -93,6 +94,7 @@ const mapStateToProps = (state) => {
     overlay_Screen: state.screens.device[state.currentLanguage],
     general: state.screens.general[state.currentLanguage],
     user: state.login,
+    loadData: state.loadData,
   };
 };
 

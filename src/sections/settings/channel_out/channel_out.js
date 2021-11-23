@@ -71,6 +71,7 @@ class ChannelOut extends Component {
       },
     );
   }
+  // revisaso
   updateTimeBase(timeBaseIndex) {
     const cmds = [this.time.minutes, this.time.seconds, this.time.milliseconds];
     Alert.alert(
@@ -124,33 +125,23 @@ class ChannelOut extends Component {
     this.device = this.props.devices.filter(
       (device) => device.phoneNumber == this.phoneNumber,
     );
-
     this.device = this.device[0];
     this.currentChannel = this.device.currentChannel;
     this.password = this.device.password;
     this.channel = this.device.channels[this.device.currentChannel - 1];
     this.prefix = this.device.prefix;
-    this.currentOnOff = this.channel.configs.channel_out.currentStatus;
-
+    this.currentOnOff = this.channel.configs.channel_out.currentStatus;   
     this.time = this.channel.configs.channel_out.base_time;
-
-    this.actType = this.channel.configs.channel_out.activation_type;
-
     this.name = this.channel.configs.channel_out.name;
-
-    this.activationType = this.channel.configs.channel_out.activation_type;
-
+    this.activationType = this.channel.configs.channel_out.activation_type; //this remove 
     this.baseTime = this.channel.configs.channel_out.base_time;
-
     this.activationTime = this.channel.configs.channel_out.activation_time;
-
     this.placeHolderActivationMessage = this.channel.configs.channel_out.on_off[
       this.currentOnOff
     ].activation_message.value;
     this.ActivationMessageCmd = this.channel.configs.channel_out.on_off[
       this.currentOnOff
     ].activation_message.command;
-
     this.placeHolderFeedBMessage = this.channel.configs.channel_out.on_off[
       this.currentOnOff
     ].feedBMessage.value;
@@ -189,7 +180,6 @@ class ChannelOut extends Component {
       activation_time: this.activation_time_input,
     });
   }
-
   handleActivationSmsChange() {
     Alert.alert(
       this.props.screen_settings_out.alerts.confirmation,
@@ -225,7 +215,6 @@ class ChannelOut extends Component {
       ],
     );
   }
-
   handleFeedBMessage() {
     Alert.alert(
       this.props.screen_settings_out.alerts.confirmation,
@@ -274,11 +263,11 @@ class ChannelOut extends Component {
     ];
     const timeBaseIndex = this.device.channels[this.currentChannel - 1].configs
       .channel_out.base_time.index;
-
     const OffOnIndex = this.currentOnOff;
     const offOnButtons = [
       this.props.screen_settings_out.on,
       this.props.screen_settings_out.off,
+      this.props.screen_settings_out.temp,
     ];
     const buttons = [1, 2, 3, 4];
     return (
@@ -291,6 +280,7 @@ class ChannelOut extends Component {
         ]}>
         <ScrollView>
           <View style={[style.container]}>
+            {/* channels */}
             <View style={style.container_control}>
               <Text
                 style={[
@@ -299,7 +289,6 @@ class ChannelOut extends Component {
                 ]}>
                 {this.props.screen_channel.title} :
               </Text>
-
               <ButtonGroupCustumized
                 action={this.updateIndex}
                 index={this.currentChannel - 1}
@@ -311,6 +300,7 @@ class ChannelOut extends Component {
                 height="40"
               />
             </View>
+             {/* channel name*/}
             <FormWrapper title={this.props.screen_settings_out.channel_name}>
               <Input
                 containerStyle={{paddingHorizontal: 0}}
@@ -324,6 +314,7 @@ class ChannelOut extends Component {
                 }}
               />
             </FormWrapper>
+            {/* base time*/}
             <FormWrapper title={this.props.screen_settings_out.base_time}>
               <ButtonGroupCustumized
                 action={this.updateTimeBase}
@@ -331,6 +322,7 @@ class ChannelOut extends Component {
                 buttons={timeBaseButtons}
               />
             </FormWrapper>
+            {/* activation time*/}
             <FormWrapper title={this.props.screen_settings_out.activation_time}>
               <Input
                 keyboardType={'numeric'}
@@ -347,6 +339,7 @@ class ChannelOut extends Component {
                 onEndEditing={this.handleActivationTimeChange.bind(this)}
               />
             </FormWrapper>
+            {/* temporary */}
             <FormWrapper
               title={this.props.screen_settings_out.personalized_command_title}>
               <ButtonGroupCustumized
@@ -355,6 +348,7 @@ class ChannelOut extends Component {
                 buttons={offOnButtons}
               />
             </FormWrapper>
+            {/* activation message */}
             <FormWrapper
               title={this.props.screen_settings_out.activation_message}>
               <Input
@@ -369,7 +363,7 @@ class ChannelOut extends Component {
                 onSubmitEditing={this.handleActivationSmsChange.bind(this)}
               />
             </FormWrapper>
-
+            {/* feedback message */}
             <FormWrapper
               title={this.props.screen_settings_out.feedback_message}>
               <Input

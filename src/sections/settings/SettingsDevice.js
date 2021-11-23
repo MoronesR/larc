@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, TouchableOpacity, FlatList, View} from 'react-native';
 import {connect} from 'react-redux';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 import Icon from '../../utils/Icon';
 import HorizontalSeparator from '../../utils/horizontalSeparator';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 class SettingsDevice extends Component {
   renderItem({item}) {
@@ -16,7 +15,7 @@ class SettingsDevice extends Component {
             cellphone: this.props.route.params.cellphone,
           });
         }}>
-        <Icon width="40" height="40" name={item.logo} />
+           <FontAwesome5 name={item.logo} size={25}  style={{color:this.props.theme.device_list_title}}/>
         <Text
           style={[
             style.text_settings,

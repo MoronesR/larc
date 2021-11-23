@@ -15,6 +15,7 @@ import EditContact from './sections/settings/calendar/EditContact';
 import EditGroup from './sections/settings/calendar/EditGroup';
 import InfoScreen from './sections/screens/InfoScreen';
 import contactScreen from './sections/screens/ContactScreen';
+import SettingTime from './sections/settings/SettingsTime';
 import {connect} from 'react-redux';
 import Icon from './utils/Icon';
 import Header from './sections/header/header'
@@ -79,10 +80,10 @@ function App(props) {
         <Stack.Screen name="settings_calendar" component={SettingsCalendar} />
         <Stack.Screen name="settings_history" component={SettingHistory} />
         <Stack.Screen name="settings_out" component={SettingOut} />
-        {/* <Stack.Screen name="settings_in" component={SettingIn} /> */}
+        <Stack.Screen name="settings_Time" component={SettingTime} options={{headerShown: false}} />
         <Stack.Screen name="settings_system" component={SettingSystem} />
-        <Stack.Screen name="settings_check" component={SettingCheck} />
-        <Stack.Screen name="EditDevice" component={EditDevice} />
+        <Stack.Screen name="settings_check" component={SettingCheck} options={{headerShown: false}}  />
+        <Stack.Screen name="EditDevice" component={EditDevice} options={{headerShown: false}} />
         <Stack.Screen name="EditContact" component={EditContact} />
         <Stack.Screen name="EditGroup" component={EditGroup} />
         <Stack.Screen name="contactScreen" component={contactScreen} />

@@ -37,7 +37,7 @@ function DrawerContent(props) {
         <DrawerItemList {...props}/>
         {/* preferences */}
         <View style={[stylesDrawer.pref,{borderTopColor: props.style.theme.header_title}]}>
-          <Text style={[stylesDrawer.prefTitle, {color: props.style.theme.header_title}]}>Preferences</Text>
+          <Text style={[stylesDrawer.prefTitle, {color: props.style.theme.header_title}]}>{props.style.drawer_titles.preferences}</Text>
           <ControlSettings />
         </View>
       </View>      
@@ -45,7 +45,7 @@ function DrawerContent(props) {
       <View style={[stylesDrawer.bottomDrawerView, {borderBottomColor: props.style.theme.header_title}]}>
         <DrawerItem
           icon={({color, size}) =><FontAwesome5 name={'sign-out-alt'} size={size} color={color} /> }
-          label="Sing Out"
+          label={props.style.drawer_titles.signOut}
           onPress={() => auth().signOut()}
           inactiveTintColor= { props.style.theme.device_list_title}
           labelStyle= {{ fontSize: 16} }
@@ -69,12 +69,12 @@ const MyDrawer = (prop) => {
           labelStyle: { fontSize:16 }
         }}
         >
-        <Drawer.Screen name="Home" 
+        <Drawer.Screen name={prop.drawer_titles.home} 
           component={StackApp} 
           options={{   
             drawerIcon: ({color, size}) => <FontAwesome5 name={'home'} size={size} color={color}/>
           }}/>
-        <Drawer.Screen name="Infomation" 
+        <Drawer.Screen name={prop.drawer_titles.info} 
         component={StackInfo}
         options={{   
           drawerIcon: ({color, size}) => <FontAwesome5 name={'info-circle'} size={size} color={color} />
@@ -129,6 +129,7 @@ const mapStateToProps = (state) => {
   return {
     //design    
     theme: state.themes[state.currentTheme],
+    drawer_titles: state.screens.drawer[state.currentLanguage],
   };
 };
 

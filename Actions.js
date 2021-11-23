@@ -135,21 +135,34 @@ export const deleteGroup = (payLoad) => ({
   payLoad,
 });
 /****************DEVICE********************* */
+export const loadData = (payLoad) => ({
+  type: 'LOAD_DATA',
+  payLoad,
+});
 //get all devices from firebase
 export const deviceListFb = (payLoad) =>{
-  return function(dispatch) {  
-    firebase.db.collection('datos')
+  return async function(dispatch) {  
+    await firebase.db.collection('datos')
     .where("author", "==", payLoad)
     .onSnapshot((querySnapshot)=>{
       const datos = [];
       querySnapshot.docs.forEach((doc) =>{
-          const {name, phoneNumber } = doc.data()
+        // console.log(doc.data());
+          const {name, phoneNumber, device_default } = doc.data()
+          const {
+            currentChannel,currentChannelIn,prefix,password,check_system_status,
+            calendar,channels,channel_in,settings_system,history,time_status
+          } = device_default;
           datos.push({
-           id:doc.id, name, phoneNumber
-          })
+           id:doc.id, name, phoneNumber,currentChannel,currentChannelIn,
+           prefix,password,check_system_status,calendar,channels,
+           channel_in,settings_system,history,time_status
+          });
       })
       dispatch(addNewDevice(datos))
+      dispatch(loadData(false))
     })
+
   };
 };
 // add device to state

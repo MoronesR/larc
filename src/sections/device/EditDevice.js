@@ -73,6 +73,7 @@ isAvailable(phoneNumber){
     return (
       <View
         style={{
+          flex:1,
           backgroundColor: this.props.theme.device_add_background,
         }}>
         <Overlay

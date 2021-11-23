@@ -37,6 +37,7 @@ const AddDevice = (props) => {
               author: props.user.email,
               name: state.name,
               phoneNumber: state.phoneNumber,
+              device_default: props.device_default,
             });
             Toast.show(props.device_screen.toasts.add);
             state.name = '';
@@ -201,6 +202,7 @@ const mapStateToProps = (state) => {
     //code back
     devices: state.devices,
     user: state.login,
+    device_default: state.device_default
   };
 };
 const mapDispatchToProps = {

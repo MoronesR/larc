@@ -5,7 +5,8 @@ import Login from './sections/screens/Authentication'
 import SplashScreen from './sections/screens/LoadingScreen';
 import Drawer from './Drawer'
 import {connect} from 'react-redux';
-import {addNewUser} from '../Actions'
+import {addNewUser} from '../Actions';
+import Toast from 'react-native-simple-toast';
 
 const main = (props) =>{
   const [isLoading, setisLoading] = useState(true);
@@ -33,7 +34,7 @@ const main = (props) =>{
       } else if (error.code === firebase.statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         console.info('play services not available or outdated')
       } else if(error.code === '7' ){
-        console.warn('Error network')
+        Toast.show("Intente conectarce a una red");
       }else{
         console.warn('some other error happened', error.code)
       }

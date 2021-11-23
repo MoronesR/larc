@@ -1,6 +1,7 @@
 const initState = {
+  loadData: true,
   nameApp: 'LARC',
-  versionApp: '2.0.0',
+  versionApp: '2.0.0-Beta',
   nameCompany: 'LARC GSM ACCESS',
   login:{
     idSession: null,
@@ -8,7 +9,7 @@ const initState = {
     anonymous: false,
   },
   currentTheme: 'dark',
-  currentLanguage: 'esp',
+  currentLanguage: 'eng',
   themes: {
     dark: {
       header_background: 'rgb(75,75,75)',
@@ -103,6 +104,7 @@ const initState = {
     prefix: '#PWD',
     password: '123456',
     check_system_status: '#STATUS?',
+    time_status:'#TIEMPO?',
     calendar: {
       search: {
         index: 0,
@@ -152,6 +154,17 @@ const initState = {
                   command: '-OFF-REPLY-TEXT:',
                 },
               },
+              {
+                value: 2,
+                activation_message: {
+                  value: '',
+                  command: '-RLY2-TEXT:',
+                },
+                feedBMessage: {
+                  value: '',
+                  command: '-RLY2-REPLY-TEXT:',
+                },
+              },
             ],
           },
         },
@@ -194,6 +207,17 @@ const initState = {
                 feedBMessage: {
                   value: '',
                   command: '-OFF-REPLY-TEXT:',
+                },
+              },
+              {
+                value: 2,
+                activation_message: {
+                  value: '',
+                  command: '-RLY2-TEXT:',
+                },
+                feedBMessage: {
+                  value: '',
+                  command: '-RLY2-REPLY-TEXT:',
                 },
               },
             ],
@@ -240,6 +264,17 @@ const initState = {
                   command: '-OFF-REPLY-TEXT:',
                 },
               },
+              {
+                value: 2,
+                activation_message: {
+                  value: '',
+                  command: '-RLY2-TEXT:',
+                },
+                feedBMessage: {
+                  value: '',
+                  command: '-RLY2-REPLY-TEXT:',
+                },
+              },
             ],
           },
         },
@@ -282,6 +317,17 @@ const initState = {
                 feedBMessage: {
                   value: '',
                   command: '-OFF-REPLY-TEXT:',
+                },
+              },
+              {
+                value: 2,
+                activation_message: {
+                  value: '',
+                  command: '-RLY2-TEXT:',
+                },
+                feedBMessage: {
+                  value: '',
+                  command: '-RLY2-REPLY-TEXT:',
                 },
               },
             ],
@@ -360,13 +406,38 @@ const initState = {
       },
     },
   },
-  loading: {
-    eng: 'Loading...',
-    esp: 'Cargando...',
-  },
   devices: [],
-
   screens: {
+    login:{
+      eng: {
+        welcome: 'Welcome',
+        logIn: 'Log In',
+        else: 'Or',
+        button_Google: 'Login With google',
+        button_Anonymous: 'Login Anonymous'
+      },
+      esp: {
+        welcome: 'Bienvenido',
+        logIn: 'Iniciar sesión',
+        else: 'O',
+        button_Google: 'Iniciar sesión con google',
+        button_Anonymous: 'Iniciar sesión anónima'
+      },
+    },
+    drawer:{
+      eng: {
+        home: 'Home',
+        info: 'Informacion',
+        preferences: 'Preferences',
+        signOut: 'Sign Out'
+      },
+      esp: {
+        home: 'Inicio',
+        info: 'Información',
+        preferences: 'Preferencias',
+        signOut: 'Cerrar sesión'
+      },
+    },
     general: {
       eng: {
         missing_numbers_label: 'Phone number must be 10 digits',
@@ -499,32 +570,33 @@ const initState = {
       eng: [
         {
           title: 'Calendar',
-          logo: 'schedule',
+          logo: 'calendar',
           route: 'settings_calendar',
         },
         {
           title: 'History',
-          logo: 'historial',
+          logo: 'history',
           route: 'settings_history',
         },
         {
           title: 'Channel out settings',
-          logo: 'settings_out',
+          logo: 'sliders-h',
           route: 'settings_out',
         },
-        // {
-        //   title: 'Channel in settings',
-        //   logo: 'settings_in',
-        //   route: 'settings_in',
-        // },
+        //this
+        {
+          title: 'Schedule adjustment',
+          logo: 'clock',
+          route: 'settings_Time',
+        },
         {
           title: 'System settings',
-          logo: 'settings',
+          logo: 'cog',
           route: 'settings_system',
         },
         {
           title: 'Check system status',
-          logo: 'settings',
+          logo: 'check-circle',
           route: 'settings_check',
         },
       ],
@@ -544,11 +616,11 @@ const initState = {
           logo: 'settings_out',
           route: 'settings_out',
         },
-        // {
-        //   title: 'Ajustes del canal in',
-        //   logo: 'settings_in',
-        //   route: 'settings_in',
-        // },
+        {
+          title: 'Ajuste de horario',
+          logo: 'historial',
+          route: 'settings_Time',
+        },
         {
           title: 'Ajustes del sistema',
           logo: 'settings',
@@ -682,6 +754,7 @@ const initState = {
         personalized_command_title: 'Customized command message',
         on: 'ON',
         off: 'OFF',
+        temp: 'Temporary',
         alerts: {
           confirmation: 'Confirmation',
           change_name: 'Do you want to change the name?',
@@ -714,6 +787,7 @@ const initState = {
         personalized_command_title: 'Personalizacion de mensaje',
         on: 'Encendido',
         off: 'Apagado',
+        temp:'Temporal',
         alerts: {
           confirmation: 'Confirmacion',
           change_name: 'Desea cambiar el nombre?',
@@ -871,6 +945,28 @@ const initState = {
       esp: {
         status: 'Estatus',
         check: 'Desea checar el estatus del dispositivo?',
+        cancel: 'Cancelar',
+        Ok: 'Ok',
+        toasts: {
+          sms: 'SMS Enviado exitosamente',
+          sms_fail: 'SMS no ha sido enviado',
+        },
+      },
+    },
+    settings_time_system: {
+      eng: {
+        status: 'Time',
+        check: 'Do you want the device time?',
+        cancel: 'Cancel',
+        Ok: 'Ok',
+        toasts: {
+          sms: 'SMS sent successfully',
+          sms_fail: 'SMS has not been sent',
+        },
+      },
+      esp: {
+        status: 'Tiempo',
+        check: 'Desea el tiempo del dispositivo?',
         cancel: 'Cancelar',
         Ok: 'Ok',
         toasts: {
