@@ -2,7 +2,7 @@ import React, {useState, Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {connect} from 'react-redux';
-import {deleteDeviceFb} from '../../../Actions';
+import {deleteDeviceFb,deleteDevice} from '../../../Actions';
 import Icon from '../../utils/Icon';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -28,10 +28,18 @@ class ListItem extends Component {
         {
           text: this.props.screen.alerts.add_confirm_label,
           onPress: () => {
-            this.props.deleteDeviceFb({
-              id: this.props.item.id,
-              phoneNumber: this.props.item.phoneNumber,
-            });
+            //here delete verifique if is anonimous
+            
+            if(!this.props.user.anonymous){
+              this.props.deleteDeviceFb({
+                id: this.props.item.id,
+                phoneNumber: this.props.item.phoneNumber,
+              });
+            }else{
+              this.props.deleteDevice({
+                phoneNumber: this.props.item.phoneNumber,
+              });
+            }
             Toast.show(this.props.screen.toasts.delete);
           },
         },
@@ -74,7 +82,6 @@ class ListItem extends Component {
             </Text>
           </View>
         </TouchableOpacity>
-
         <View style={style.icons_container}>
           <TouchableOpacity
             onPress={this.handleDeleteDevice}
@@ -139,11 +146,13 @@ const style = StyleSheet.create({
 
 const mapDispatchToProps = {
   deleteDeviceFb,
+  deleteDevice
 };
 const mapStateToProps = (state) => {
   return {
     //design    
     theme: state.themes[state.currentTheme],
+    user:state.login,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ListItem);

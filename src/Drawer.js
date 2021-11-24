@@ -7,6 +7,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ControlSettings from './sections/device/ControlSettings';
 import StackInfo from './StackInfo';
 import StackApp from './StackApp';
+import {clerdataFromDevice} from '../Actions';
 
 import {connect} from 'react-redux';
 
@@ -46,7 +47,11 @@ function DrawerContent(props) {
         <DrawerItem
           icon={({color, size}) =><FontAwesome5 name={'sign-out-alt'} size={size} color={color} /> }
           label={props.style.drawer_titles.signOut}
-          onPress={() => auth().signOut()}
+          onPress={() => {
+              props.style.clerdataFromDevice()
+              auth().signOut()
+            }           
+          }
           inactiveTintColor= { props.style.theme.device_list_title}
           labelStyle= {{ fontSize: 16} }
           />
@@ -133,4 +138,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(MyDrawer)
+const mapDispatchToProps = {
+  clerdataFromDevice,
+}
+export default connect(mapStateToProps,mapDispatchToProps)(MyDrawer)

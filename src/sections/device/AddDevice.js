@@ -6,7 +6,7 @@ import React, {useState} from 'react';
 import {Button, Overlay, Input} from 'react-native-elements';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import {addNewDeviceFb} from '../../../Actions';
+import {addNewDeviceFb, addNewDeviceToState} from '../../../Actions';
 import Toast from 'react-native-simple-toast';
 
 const AddDevice = (props) => {
@@ -33,12 +33,20 @@ const AddDevice = (props) => {
           Toast.show(props.general_screen.missing_numbers_label);
         } else {
           if (!isAvailable(state.phoneNumber)) {
-            props.addNewDeviceFb({
-              author: props.user.email,
-              name: state.name,
-              phoneNumber: state.phoneNumber,
-              device_default: props.device_default,
-            });
+            if(!props.user.anonymous){
+              props.addNewDeviceFb({
+                author: props.user.email,
+                name: state.name,
+                phoneNumber: state.phoneNumber,
+                device_default: props.device_default,
+              });
+            }else{
+              props.addNewDeviceToState({
+                name: state.name,
+                phoneNumber: state.phoneNumber,
+              });
+            }
+            
             Toast.show(props.device_screen.toasts.add);
             state.name = '';
             state.phoneNumber = '';
@@ -206,6 +214,6 @@ const mapStateToProps = (state) => {
   };
 };
 const mapDispatchToProps = {
-  addNewDeviceFb,
+  addNewDeviceFb,addNewDeviceToState,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AddDevice);

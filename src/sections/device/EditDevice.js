@@ -1,9 +1,9 @@
-import React, {Component, useState} from 'react';
+import React, {Component, } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Button, Overlay, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import {connect} from 'react-redux';
-import {editDeviceFb} from '../../../Actions';
+import {editDeviceFb, editDeviceStore} from '../../../Actions';
 class EditDevice extends Component {
   constructor() {
     super();
@@ -27,14 +27,14 @@ class EditDevice extends Component {
     return false;
   }
 
-isAvailable(phoneNumber){
-    const exists = this.props.devices.find(
-      (device) => device.phoneNumber == phoneNumber,
-    );
-    if (exists) {
-      return true;
-    }
-  };
+  isAvailable(phoneNumber){
+      const exists = this.props.devices.find(
+        (device) => device.phoneNumber == phoneNumber,
+      );
+      if (exists) {
+        return true;
+      }
+    };
   handleEditDevice = () => {
     if (this.verifyEmptyValues()) {
       if (this.state.phoneEdit.length !== 10) {
@@ -42,14 +42,23 @@ isAvailable(phoneNumber){
       } else {
         if (this.state.phoneEdit.match(/^[0-9]+$/)) {
           if (!this.isAvailable(this.state.phoneEdit)) {
-               this.props.editDeviceFb({
+            if(!this.props.user.anonymous){
+              this.props.editDeviceFb({
                 id: this.props.route.params.id,
                 author: this.props.user.email,
                 phoneEdit: this.state.phoneEdit,
                 nameEdit: this.state.nameEdit,
               });
-              Toast.show(this.props.screen.toasts.edit);
-              this.goBack();
+            }else{
+              this.props.editDeviceStore({
+                phoneNumber: this.props.route.params.phoneNumber,
+                name: this.props.route.params.name,
+                phoneEdit: this.state.phoneEdit,
+                nameEdit: this.state.nameEdit,
+              });
+            }
+            Toast.show(this.props.screen.toasts.edit);
+            this.goBack();
           }else{
             Toast.show(this.props.device_screen.toasts.add_repitation);
           }
@@ -200,6 +209,7 @@ const styles = StyleSheet.create({
 });
 const mapDispatchToProps = {
   editDeviceFb,
+  editDeviceStore
 };
 const mapStateToProps = (state) => {
   return {

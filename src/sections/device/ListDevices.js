@@ -13,7 +13,9 @@ import {deviceListFb} from '../../../Actions'
 class ListaDispositivos extends Component {
   constructor(props) {
     super(props);
-    this.props.deviceListFb(this.props.user.email);
+    if(!this.props.user.anonymous){
+      this.props.deviceListFb(this.props.user.email);
+    }
   }
   renderItem({item}) {
     return (

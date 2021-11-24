@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Alert} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firebase from '../firebase/db'
 import Login from './sections/screens/Authentication'
@@ -10,13 +11,11 @@ import Toast from 'react-native-simple-toast';
 
 const main = (props) =>{
   const [isLoading, setisLoading] = useState(true);
-
   useEffect(() => {
     setTimeout(() => {
       setisLoading(false);
     }, 2000);
   },[]);
-
   //login google or anonymous
   const onGoogleButtonPress = async() => {
     try {
@@ -41,16 +40,29 @@ const main = (props) =>{
     }
   }
   const onAnonymousPress = async() => {
-    auth()
-    .signInAnonymously()
-    .then(() => {
-      console.log('User signed in anonymously');
-    })
-    .catch(error => {
-      console.error(error);
-    });
+    {Alert.alert(props.login_titles.anonymous.title, props.login_titles.anonymous.body, [
+      {
+        text:props.login_titles.anonymous.cancel,
+        onPress: () => {
+          console.log(props.login_titles.anonymous.cancel);
+        },
+      },
+      {
+        text: props.login_titles.anonymous.ok,
+        onPress: () => {
+           auth()
+          .signInAnonymously()
+          .then(() => {
+            console.log('User signed in anonymously');
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        },
+      },
+    ])}
+  
   }
-
   const saveNewUser = async() =>{
     const dataUser = auth().currentUser;
     await firebase.db.collection('User')
@@ -60,7 +72,6 @@ const main = (props) =>{
       email: dataUser.email
     })
   }
-
   auth().onAuthStateChanged((user) => {
     if (user) {
       props.addNewUser({
@@ -78,7 +89,6 @@ const main = (props) =>{
       })
     }
   });
-
   if (isLoading) {
     return <SplashScreen />;
   }else{
@@ -90,7 +100,10 @@ const main = (props) =>{
 }
 
 const mapStateToProps = (state) => {
-  return {authenticated: state.login.session}
+  return {
+    authenticated: state.login.session,
+    login_titles: state.screens.login[state.currentLanguage],
+  }
 }
 
 const mapDispatchToProps = {

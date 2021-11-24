@@ -134,6 +134,10 @@ export const deleteGroup = (payLoad) => ({
   type: 'DELETE_GROUP',
   payLoad,
 });
+/******CLEAR DEVICE******/
+export const clerdataFromDevice = () => ({
+  type: 'CLEAR_DATA_DEVICE',
+});
 /****************DEVICE********************* */
 export const loadData = (payLoad) => ({
   type: 'LOAD_DATA',
@@ -142,6 +146,7 @@ export const loadData = (payLoad) => ({
 //get all devices from firebase
 export const deviceListFb = (payLoad) =>{
   return async function(dispatch) {  
+    dispatch(loadData(true))
     await firebase.db.collection('datos')
     .where("author", "==", payLoad)
     .onSnapshot((querySnapshot)=>{
@@ -162,10 +167,13 @@ export const deviceListFb = (payLoad) =>{
       dispatch(addNewDevice(datos))
       dispatch(loadData(false))
     })
-
   };
 };
-// add device to state
+export const addNewDeviceToState = (payLoad) => ({
+  type: 'ADD_DEVICE_STATE',
+  payLoad,
+});
+// add device to state from firebase
 export const addNewDevice = (payLoad) => ({
   type: 'ADD_DEVICE',
   payLoad,
@@ -200,6 +208,10 @@ export const editDeviceFb = (payLoad) => {
     })
   };
 };
+export const editDeviceStore = (payLoad) => ({
+  type: 'EDIT_DEVICE',
+  payLoad,
+});
 /****************THEME********************* */
 export const setTheme = (payLoad) => ({
   type: 'SET_THEME',

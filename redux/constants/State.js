@@ -1,5 +1,5 @@
 const initState = {
-  loadData: true,
+  loadData: false,
   nameApp: 'LARC',
   versionApp: '2.0.0-Beta',
   nameCompany: 'LARC GSM ACCESS',
@@ -414,14 +414,26 @@ const initState = {
         logIn: 'Log In',
         else: 'Or',
         button_Google: 'Login With google',
-        button_Anonymous: 'Login Anonymous'
+        button_Anonymous: 'Login Anonymous',
+        anonymous:{
+          title:"anonymous",
+          body:"By choosing the anonymous option, your data will not be saved.",
+          ok:"accept",
+          cancel:"cancel",
+        },
       },
       esp: {
         welcome: 'Bienvenido',
         logIn: 'Iniciar sesión',
         else: 'O',
         button_Google: 'Iniciar sesión con google',
-        button_Anonymous: 'Iniciar sesión anónima'
+        button_Anonymous: 'Iniciar sesión anónima',
+        anonymous:{
+          title:"anónimo",
+          body:"Al elegir la opción anónima, sus datos no se guardarán.",
+          ok:"aceptar",
+          cancel:"cancelar",
+        },
       },
     },
     drawer:{

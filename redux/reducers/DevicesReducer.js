@@ -783,6 +783,18 @@ function devicesReducer(state , action) {
         ...state,
         devices: action.payLoad,
       };
+    case 'ADD_DEVICE_STATE':
+      return {
+        ...state,
+        devices: [
+          ...state.devices,
+          {
+            ...state.device_default,
+            name: action.payLoad.name,
+            phoneNumber: action.payLoad.phoneNumber,
+          },
+        ],
+      };
     case 'DELETE_DEVICE':
       return {
         ...state,
@@ -807,6 +819,11 @@ function devicesReducer(state , action) {
             return device;
           }
         }),
+      };
+    case 'CLEAR_DATA_DEVICE':
+      return {
+        ...state,
+        devices: [],
       };
     /******************CONFIGS******************* */
     case 'SET_LANGUAGE':
