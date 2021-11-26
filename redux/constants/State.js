@@ -1,7 +1,7 @@
 const initState = {
   loadData: false,
   nameApp: 'LARC',
-  versionApp: '2.0.0-Beta',
+  versionApp: '2.0.2',
   nameCompany: 'LARC GSM ACCESS',
   login:{
     idSession: null,
@@ -112,7 +112,7 @@ const initState = {
         serial: '#WHL',
       },
       calendar_prefix: '#WHL',
-      groups: [],
+      groups: []
     },
     channels: [
       {
@@ -615,32 +615,32 @@ const initState = {
       esp: [
         {
           title: 'Agenda',
-          logo: 'schedule',
+          logo: 'calendar',
           route: 'settings_calendar',
         },
         {
           title: 'Historial',
-          logo: 'historial',
+          logo: 'history',
           route: 'settings_history',
         },
         {
           title: 'Ajustes del canal salida',
-          logo: 'settings_out',
+          logo: 'sliders-h',
           route: 'settings_out',
         },
         {
           title: 'Ajuste de horario',
-          logo: 'historial',
+          logo: 'clock',
           route: 'settings_Time',
         },
         {
           title: 'Ajustes del sistema',
-          logo: 'settings',
+          logo: 'cog',
           route: 'settings_system',
         },
         {
           title: 'Verificar estado del sistema',
-          logo: 'settings',
+          logo: 'check-circle',
           route: 'settings_check',
         },
       ],
@@ -674,6 +674,7 @@ const initState = {
           suspend_contact: 'Do you want suspend the contact',
           activate_contact: 'Do you want re-activate the contact',
           add_contact: 'Do you want to add the contact',
+          searchBy: 'Do you want to change the search option?'
         },
         toasts: {
           sms: 'SMS sent successfully',
@@ -713,6 +714,7 @@ const initState = {
           suspend_contact: 'Quieres suspender el contacto',
           activate_contact: 'Quieres re-activar el contacto',
           add_contact: 'Quieres agregar este contacto',
+          searchBy: 'Desea cambiar la opcion de busqueda?'
         },
         toasts: {
           sms: 'SMS Enviado exitosamente',
@@ -772,6 +774,7 @@ const initState = {
           change_name: 'Do you want to change the name?',
           change_baseTime: 'Do you want to change the base time?',
           change_activationTime: 'Do you want to change the activation time?',
+          change_commandMessage: 'Do you want to change the the command message?',
           change_activationMessage:
             'Do you want to change the activation message?',
           change_feedbackMessage: 'Do you want to change the feedback message?',
@@ -804,8 +807,8 @@ const initState = {
           confirmation: 'Confirmacion',
           change_name: 'Desea cambiar el nombre?',
           change_baseTime: 'Desea cambiar el tiempo base?',
-          change_activationTime:
-            'Desea cambiar el mensaje de activacion personalizado?',
+          change_activationTime:'Desea cambiar el mensaje de activacion personalizado?',
+          hange_commandMessage:'Desea cambiar elconado de mensaje personalizado?',
           change_activationMessage: 'Desea cambiar el mensaje de activacion?',
           change_feedbackMessage:
             'Desea cambiar el mensaje de retroalimentacion?',
@@ -968,7 +971,7 @@ const initState = {
     settings_time_system: {
       eng: {
         status: 'Time',
-        check: 'Do you want the device time?',
+        check: 'Do you want to change the device time?',
         cancel: 'Cancel',
         Ok: 'Ok',
         toasts: {
@@ -978,7 +981,7 @@ const initState = {
       },
       esp: {
         status: 'Tiempo',
-        check: 'Desea el tiempo del dispositivo?',
+        check: 'Desea cambiar el tiempo del dispositivo?',
         cancel: 'Cancelar',
         Ok: 'Ok',
         toasts: {

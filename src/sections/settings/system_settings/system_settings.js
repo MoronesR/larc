@@ -13,6 +13,7 @@ import {
   setWorkingMode,
   setPassword,
   setSystemReply,
+  editFb,
 } from '../../../../Actions';
 import Toast from 'react-native-simple-toast';
 
@@ -34,6 +35,30 @@ class SystemSettings extends Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSetAllRelayStatus = this.handleSetAllRelayStatus.bind(this);
     this.updateReplyMessageIndex = this.updateReplyMessageIndex.bind(this);
+  }
+  findDevices() {
+    this.device = this.props.devices.filter(
+      (device) => device.phoneNumber == this.phoneNumber,
+    );
+
+    this.device = this.device[0];
+    this.system = this.device.channels[this.device.currentChannel - 1];
+    this.currentChannel = this.device.currentChannel;
+    this.password = this.device.password;
+    this.prefix = this.device.prefix;
+    this.freeCmd = this.device.settings_system.free_control;
+    this.indexFreeControl = this.freeCmd.index;
+    this.feedcmd = this.device.settings_system.feedBMessage;
+    this.indexFeedback = this.feedcmd.index;
+
+    this.replycmd = this.device.settings_system.replyMessage;
+    this.indexReply = this.replycmd.index;
+
+    this.callOrRcmd = this.device.settings_system.call_ring_tone;
+    this.indexCallOrRington = this.callOrRcmd.index;
+    this.workModecmd = this.device.settings_system.working_mode;
+    this.indexWorkingMode = this.workModecmd.index;
+    this.pwdCap = this.device.settings_system.update_pwd_cap;
   }
   sendMessageIOS(msg, phone) {
     SendSMS.send(
@@ -96,6 +121,13 @@ class SystemSettings extends Component {
               phoneNumber: this.phoneNumber,
               index: freeControlIndex,
             });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.settings_system',
+                data: this.device.settings_system,
+              });
+            }   
           },
         },
       ],
@@ -131,6 +163,13 @@ class SystemSettings extends Component {
               phoneNumber: this.phoneNumber,
               index: feedBackMessageIndex,
             });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.settings_system',
+                data: this.device.settings_system,
+              });
+            }   
           },
         },
       ],
@@ -166,107 +205,18 @@ class SystemSettings extends Component {
               phoneNumber: this.phoneNumber,
               index: replyMessageIndex,
             });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.settings_system',
+                data: this.device.settings_system,
+              });
+            }   
           },
         },
       ],
       {cancelable: true},
     );
-  }
-
-  updateRingToneIndex(ringToneIndex) {
-    const cmds = [this.callOrRcmd.dial, this.callOrRcmd.dtmf];
-    Alert.alert(
-      this.props.screen.alert.confirm,
-      this.props.screen.alert.call_ring,
-      [
-        {
-          text: this.props.screen.alert.cancel,
-          onPress: () => {
-            console.log('Canceled');
-          },
-        },
-        {
-          text: this.props.screen.alert.ok,
-          onPress: () => {
-            Platform.OS === 'ios' &&
-              this.sendMessageIOS(
-                `${this.prefix}${this.password}#${cmds[ringToneIndex]}`,
-                this.phoneNumber,
-              );
-            Platform.OS === 'android' &&
-              this.sendMessageAndroid(
-                `${this.prefix}${this.password}#${cmds[ringToneIndex]}`,
-                this.phoneNumber,
-              );
-            this.props.setCallOrRingtone({
-              phoneNumber: this.phoneNumber,
-              index: ringToneIndex,
-            });
-          },
-        },
-      ],
-      {cancelable: true},
-    );
-  }
-  updateWorkingModeIndex(workingModeIndex) {
-    const cmds = [this.workModecmd.toggle, this.workModecmd.switch];
-    Alert.alert(
-      this.props.screen.alert.confirm,
-      this.props.screen.alert.workingMode,
-      [
-        {
-          text: this.props.screen.alert.cancel,
-          onPress: () => {
-            console.log('Canceled');
-          },
-        },
-        {
-          text: this.props.screen.alert.ok,
-          onPress: () => {
-            Platform.OS === 'ios' &&
-              this.sendMessageIOS(
-                `${this.prefix}${this.password}#${cmds[workingModeIndex]}`,
-                this.phoneNumber,
-              );
-            Platform.OS === 'android' &&
-              this.sendMessageAndroid(
-                `${this.prefix}${this.password}#${cmds[workingModeIndex]}`,
-                this.phoneNumber,
-              );
-            this.props.setWorkingMode({
-              phoneNumber: this.phoneNumber,
-              index: workingModeIndex,
-            });
-          },
-        },
-      ],
-      {cancelable: true},
-    );
-  }
-
-  findDevices() {
-    this.device = this.props.devices.filter(
-      (device) => device.phoneNumber == this.phoneNumber,
-    );
-
-    this.device = this.device[0];
-    this.system = this.device.channels[this.device.currentChannel - 1];
-    this.currentChannel = this.device.currentChannel;
-    this.password = this.device.password;
-    this.prefix = this.device.prefix;
-    this.freeCmd = this.device.settings_system.free_control;
-    this.indexFreeControl = this.freeCmd.index;
-    this.feedcmd = this.device.settings_system.feedBMessage;
-    this.indexFeedback = this.feedcmd.index;
-
-    this.replycmd = this.device.settings_system.replyMessage;
-    this.indexReply = this.replycmd.index;
-
-    this.callOrRcmd = this.device.settings_system.call_ring_tone;
-    this.indexCallOrRington = this.callOrRcmd.index;
-    this.workModecmd = this.device.settings_system.working_mode;
-    this.indexWorkingMode = this.workModecmd.index;
-    this.pwdCap = this.device.settings_system.update_pwd_cap;
   }
   handlePasswordChange() {
     if (
@@ -302,6 +252,13 @@ class SystemSettings extends Component {
                     password: this.newPassword,
                     phoneNumber: this.phoneNumber,
                   });
+                  if(!this.props.user.anonymous){
+                    this.props.editFb({
+                      id: this.device.id,
+                      rute: 'device_default.password',
+                      data: this.newPassword,
+                    });
+                  }   
                 },
               },
             ],
@@ -316,6 +273,90 @@ class SystemSettings extends Component {
     } else {
       Toast.show(this.props.screen.toasts.pwd_empty);
     }
+  }
+  updateRingToneIndex(ringToneIndex) {
+    const cmds = [this.callOrRcmd.dial, this.callOrRcmd.dtmf];
+    Alert.alert(
+      this.props.screen.alert.confirm,
+      this.props.screen.alert.call_ring,
+      [
+        {
+          text: this.props.screen.alert.cancel,
+          onPress: () => {
+            console.log('Canceled');
+          },
+        },
+        {
+          text: this.props.screen.alert.ok,
+          onPress: () => {
+            Platform.OS === 'ios' &&
+              this.sendMessageIOS(
+                `${this.prefix}${this.password}#${cmds[ringToneIndex]}`,
+                this.phoneNumber,
+              );
+            Platform.OS === 'android' &&
+              this.sendMessageAndroid(
+                `${this.prefix}${this.password}#${cmds[ringToneIndex]}`,
+                this.phoneNumber,
+              );
+            this.props.setCallOrRingtone({
+              phoneNumber: this.phoneNumber,
+              index: ringToneIndex,
+            });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.settings_system',
+                data: this.device.settings_system,
+              });
+            } 
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  }
+  updateWorkingModeIndex(workingModeIndex) {
+    const cmds = [this.workModecmd.toggle, this.workModecmd.switch];
+    Alert.alert(
+      this.props.screen.alert.confirm,
+      this.props.screen.alert.workingMode,
+      [
+        {
+          text: this.props.screen.alert.cancel,
+          onPress: () => {
+            console.log('Canceled');
+          },
+        },
+        {
+          text: this.props.screen.alert.ok,
+          onPress: () => {
+            Platform.OS === 'ios' &&
+              this.sendMessageIOS(
+                `${this.prefix}${this.password}#${cmds[workingModeIndex]}`,
+                this.phoneNumber,
+              );
+            Platform.OS === 'android' &&
+              this.sendMessageAndroid(
+                `${this.prefix}${this.password}#${cmds[workingModeIndex]}`,
+                this.phoneNumber,
+              );
+            this.props.setWorkingMode({
+              phoneNumber: this.phoneNumber,
+              index: workingModeIndex,
+            });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.settings_system',
+                data: this.device.settings_system,
+              });
+            } 
+          },
+        },
+      ],
+      {cancelable: true},
+    );
   }
   handleSetAllRelayStatus() {
     if (this.all_relay_var == 'undefined') {
@@ -482,6 +523,7 @@ const mapStateToProps = (state) => {
     theme: state.themes[state.currentTheme],
     screen: state.screens.settings_system_settings[state.currentLanguage],
     devices: state.devices,
+    user:state.login,
   };
 };
 const mapDistpatchToProps = {
@@ -491,5 +533,6 @@ const mapDistpatchToProps = {
   setWorkingMode,
   setPassword,
   setSystemReply,
+  editFb
 };
 export default connect(mapStateToProps, mapDistpatchToProps)(SystemSettings);

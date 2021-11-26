@@ -13,7 +13,6 @@ import SettingCheck from './sections/settings/SettingsCheck';
 import EditDevice from './sections/device/EditDevice';
 import EditContact from './sections/settings/calendar/EditContact';
 import EditGroup from './sections/settings/calendar/EditGroup';
-import InfoScreen from './sections/screens/InfoScreen';
 import contactScreen from './sections/screens/ContactScreen';
 import SettingTime from './sections/settings/SettingsTime';
 import {connect} from 'react-redux';
@@ -51,6 +50,17 @@ function App(props) {
           },
         })}
         initialRouteName={'DevicesScreen'}>
+        <Stack.Screen name="settings_history" component={SettingHistory} />
+        <Stack.Screen name="settings_out" component={SettingOut} />
+
+        <Stack.Screen name="settings_system" component={SettingSystem} />
+
+        
+        <Stack.Screen name="EditContact" component={EditContact} />
+        
+        
+        
+        {/* primera pantalla */}
         <Stack.Screen 
           name="DevicesScreen" 
           component={DevicesScreen}
@@ -60,6 +70,8 @@ function App(props) {
             };
           }}
         />
+        <Stack.Screen name="EditDevice" component={EditDevice} options={{headerShown: false}} />
+        {/* segunda pantalla */}
         <Stack.Screen
           name="DeviceControl"
           component={DeviceControl}
@@ -77,17 +89,13 @@ function App(props) {
           }}
         />
         <Stack.Screen name="SettingsDevice" component={SettingsDevice} />
-        <Stack.Screen name="settings_calendar" component={SettingsCalendar} />
-        <Stack.Screen name="settings_history" component={SettingHistory} />
-        <Stack.Screen name="settings_out" component={SettingOut} />
-        <Stack.Screen name="settings_Time" component={SettingTime} options={{headerShown: false}} />
-        <Stack.Screen name="settings_system" component={SettingSystem} />
-        <Stack.Screen name="settings_check" component={SettingCheck} options={{headerShown: false}}  />
-        <Stack.Screen name="EditDevice" component={EditDevice} options={{headerShown: false}} />
-        <Stack.Screen name="EditContact" component={EditContact} />
-        <Stack.Screen name="EditGroup" component={EditGroup} />
-        <Stack.Screen name="contactScreen" component={contactScreen} />
-        <Stack.Screen name="InfoScreen" component={InfoScreen} />
+         {/* Tercera pantalla */}
+         <Stack.Screen name="settings_Time" component={SettingTime} options={{headerShown: false}} />
+         <Stack.Screen name="settings_check" component={SettingCheck} options={{headerShown: false}}  />
+         {/* calendar */}
+         <Stack.Screen name="settings_calendar" component={SettingsCalendar} />
+         <Stack.Screen name="EditGroup" component={EditGroup} options={{headerShown: false}} />
+         <Stack.Screen name="contactScreen" component={contactScreen} />
       </Stack.Navigator>
   );
 }

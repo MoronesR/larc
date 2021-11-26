@@ -28,12 +28,17 @@ class EditDevice extends Component {
   }
 
   isAvailable(phoneNumber){
+    if(this.props.route.params.phoneNumber == phoneNumber){
+      console.log(this.state.phoneEdit,phoneNumber);
+      return false;
+    }else{
       const exists = this.props.devices.find(
         (device) => device.phoneNumber == phoneNumber,
       );
       if (exists) {
         return true;
       }
+    }
     };
   handleEditDevice = () => {
     if (this.verifyEmptyValues()) {
@@ -48,6 +53,7 @@ class EditDevice extends Component {
                 author: this.props.user.email,
                 phoneEdit: this.state.phoneEdit,
                 nameEdit: this.state.nameEdit,
+                device_default:this.props.device_default,
               });
             }else{
               this.props.editDeviceStore({
@@ -219,6 +225,7 @@ const mapStateToProps = (state) => {
     devices: state.devices,
     device_screen: state.screens.device[state.currentLanguage],
     user: state.login,
+    device_default: state.device_default,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(EditDevice);

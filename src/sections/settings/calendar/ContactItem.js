@@ -10,6 +10,7 @@ import {
 import SmsAndroid from 'react-native-get-sms-android';
 import SendSMS from 'react-native-sms';
 import Toast from 'react-native-simple-toast';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 class ListItem extends Component {
   constructor() {
     super();
@@ -242,17 +243,17 @@ class ListItem extends Component {
           <TouchableOpacity
             style={style.icon}
             onPress={this.handleActivateContact}>
-            <Icon width={this.width} height={this.height} name="check" />
+            <FontAwesome5 name={'check'} size={20} style={{color:this.props.theme.device_list_title}}/>
           </TouchableOpacity>
           <TouchableOpacity
             style={style.icon}
             onPress={this.handleSuspendContact}>
-            <Icon width={this.width} height={this.height} name="mark" />
+            <FontAwesome5 name={'ban'} size={20} style={{color:this.props.theme.device_list_title}}/>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={this.handleDeleteContact}
             style={style.icon}>
-            <Icon width={this.width} height={this.height} name="delete" />
+            <FontAwesome5 name={'trash-alt'} size={20} style={{color:this.props.theme.device_list_title}}/>
           </TouchableOpacity>
           <TouchableOpacity
             style={style.icon}
@@ -265,7 +266,7 @@ class ListItem extends Component {
                 id: this.props.group_id,
               });
             }}>
-            <Icon width={this.width} height={this.height} name="edit" />
+            <FontAwesome5 name={'edit'} size={20} style={{color:this.props.theme.device_list_title}}/>
           </TouchableOpacity>
         </View>
       </View>

@@ -2,111 +2,129 @@
 Es una especie de over layout que recibe un formulario que debe ser completado todos sus campos
 ademas despues de confirmarlo este se debe agregar ala memoria
 */
-import React, {useState} from 'react';
+import React, {Component} from 'react';
 import {Button, Overlay, Input} from 'react-native-elements';
 import {View, Text, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
-import {addGroup} from '../../../../Actions';
+import {addGroup,editFb} from '../../../../Actions';
 import Toast from 'react-native-simple-toast';
 
-const AddContact = (props) => {
-  let [state, setState] = useState({
-    isVisible: false,
-    input_name: '',
-  });
-  
-  const toggleOverlay = () => {
-    setState({
-      ...state,
-      isVisible: !state.isVisible,
+class AddContact extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isVisible: false,
+      input_name: '',
+    };
+  }
+
+  toggleOverlay = () => {
+    this.setState({
+      ...this.state,
+      isVisible: !this.state.isVisible,
     });
   };
-  const fullValues = () => {
-    if (state.input_name !== '') {
+  fullValues = () => {
+    if (this.state.input_name !== '') {
       return true;
     }
     return false;
   };
-
-  const addGroup = () => {
-    if (fullValues()) {
-      props.addGroup({
-        name: state.input_name,
-        phoneNumber: props.phoneNumber,
+  addGroup = () => {
+    if (this.fullValues()) {
+      this.props.addGroup({
+        name: this.state.input_name,
+        phoneNumber: this.props.phoneNumber,
       });
-      state.input_name='';
-      Toast.show(props.device_screen.toasts.addGroup)
-      toggleOverlay();
+      setTimeout(() => {
+        if(!this.props.user.anonymous){
+          this.props.editFb({
+            id: this.device.id,
+            rute: 'device_default.calendar',
+            data: this.device.calendar,
+          });
+        }   
+      }, 100);
       
-    } else {
-      Toast.show(props.screen_general.missing_fields);
+      this.state.input_name='';
+      Toast.show(this.props.device_screen.toasts.addGroup)
+      this.toggleOverlay()
+    }else {
+      Toast.show(this.props.screen_general.missing_fields);
     }
-  };
-
-  return (
-    <View
-      style={{
-        backgroundColor: props.theme.overlay_background,
-      }}>
-      <Button
-        title={props.device_screen.add_group}
-        buttonStyle={{
-          backgroundColor: props.theme.overlay_background,
-        }}
-        titleStyle={{color: props.theme.overlay_title}}
-        onPress={toggleOverlay}
-      />
-
-      <Overlay
-        overlayStyle={[
-          style.Overlay,
-          {backgroundColor: props.theme.overlay_background},
-        ]}
-        isVisible={state.isVisible}
-        onBackdropPress={toggleOverlay}>
-        <View style={[style.container]}>
-          <View style={style.container_form}>
-            <Text style={[style.label, {color: props.theme.overlay_title}]}>
-              {props.device_screen.name_label} :
-            </Text>
-            <Input
-              inputContainerStyle={style.input_container_style}
-              containerStyle={style.input_container}
-              placeholder={props.device_screen.name_group_placeholder_label}
-              inputStyle={{color: props.theme.overlay_title}}
-              onChangeText={(text) => {
-                setState({
-                  ...state,
-                  input_name: text,
-                });
-              }}
-            />
+  }
+  findDevice = () => {
+    this.device = this.props.devices.filter(
+      (device) => device.phoneNumber == this.props.phoneNumber,
+    );
+    this.device = this.device[0];
+  }
+  render() {
+    this.findDevice();
+    return (
+      <View
+        style={{
+          backgroundColor: this.props.theme.overlay_background,
+        }}>
+        <Button
+          title={this.props.device_screen.add_group}
+          buttonStyle={{
+            backgroundColor: this.props.theme.overlay_background,
+          }}
+          titleStyle={{color: this.props.theme.overlay_title}}
+          onPress={this.toggleOverlay}
+        />
+        <Overlay
+          overlayStyle={[
+            style.Overlay,
+            {backgroundColor: this.props.theme.overlay_background},
+          ]}
+          isVisible={this.state.isVisible}
+          onBackdropPress={this.toggleOverlay}>
+          <View style={[style.container]}>
+            <View style={style.container_form}>
+              <Text style={[style.label, {color: this.props.theme.overlay_title}]}>
+                {this.props.device_screen.name_label} :
+              </Text>
+              <Input
+                inputContainerStyle={style.input_container_style}
+                containerStyle={style.input_container}
+                placeholder={this.props.device_screen.name_group_placeholder_label}
+                inputStyle={{color: this.props.theme.overlay_title}}
+                onChangeText={(text) => {
+                  this.setState({
+                    ...this.state,
+                    input_name: text,
+                  });
+                }}
+              />
+            </View>
+            <View style={style.container_buttons}>
+              <Button
+                title={this.props.device_screen.add_cancel_label}
+                buttonStyle={[
+                  style.button_cancel,
+                  {backgroundColor: this.props.theme.overlay_button_regular},
+                ]}
+                titleStyle={{color: this.props.theme.overlay_button_title}}
+                onPress={this.toggleOverlay}
+              />
+              <Button
+                title={this.props.device_screen.add_confirm_label}
+                buttonStyle={[
+                  style.button_confirm,
+                  {backgroundColor: this.props.theme.overlay_button_primary},
+                ]}
+                titleStyle={{color: this.props.theme.overlay_button_title}}
+                onPress={this.addGroup}
+              />
+            </View>
           </View>
-          <View style={style.container_buttons}>
-            <Button
-              title={props.device_screen.add_cancel_label}
-              buttonStyle={[
-                style.button_cancel,
-                {backgroundColor: props.theme.overlay_button_regular},
-              ]}
-              titleStyle={{color: props.theme.overlay_button_title}}
-              onPress={toggleOverlay}
-            />
-            <Button
-              title={props.device_screen.add_confirm_label}
-              buttonStyle={[
-                style.button_confirm,
-                {backgroundColor: props.theme.overlay_button_primary},
-              ]}
-              titleStyle={{color: props.theme.overlay_button_title}}
-              onPress={addGroup}
-            />
-          </View>
-        </View>
-      </Overlay>
-    </View>
-  );
-};
+        </Overlay>
+      </View>
+    );
+  }
+}
 
 const style = StyleSheet.create({
   Overlay: {
@@ -155,11 +173,12 @@ const mapStateToProps = (state) => {
     device_screen: state.screens.settings_calendar[state.currentLanguage],
     screen_general: state.screens.general[state.currentLanguage],
     devices: state.devices,
+    user:state.login,
+    calendar: state.screens.settings_calendar[state.currentLanguage],
   };
 };
-
 const mapDispatchToProps = {
-  addGroup,
+  addGroup,editFb,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddContact);

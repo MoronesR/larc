@@ -3,8 +3,6 @@ import {FlatList, StyleSheet, View, Text} from 'react-native';
 import ContactItem from './ContactItem';
 import {connect} from 'react-redux';
 import Separator from '../../../utils/horizontalPaddingSeparator';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 class ListContact extends Component {
   renderItem({item}) {
     return (
@@ -29,7 +27,8 @@ class ListContact extends Component {
     );
     this.device = this.device[0];
     //si el id es igual a 1, significa que esta en la posicion 0
-    this.data = this.device.calendar.groups[this.props.group_id - 1].contacts;
+    // console.log(this.props.group_id);
+    this.data = this.device.calendar.groups[this.props.position].contacts;
   }
   renderEmptyComponent() {
     return (

@@ -4,7 +4,7 @@ import {OverLay, Button, Input} from 'react-native-elements';
 import {connect} from 'react-redux';
 import FormWrapper from '../../../utils/FormWrapperHorizontal';
 import ButtonGroupCustumized from '../../../utils/ButtonComponentStyle';
-import {setCalendarIndex} from '../../../../Actions';
+import {setCalendarIndex,editFb,} from '../../../../Actions';
 import SmsAndroid from 'react-native-get-sms-android';
 import SendSMS from 'react-native-sms';
 import Toast from 'react-native-simple-toast';
@@ -45,19 +45,42 @@ class Calendar extends Component {
       },
     );
   }
-
   updateSearchIndex(searchMessageIndex) {
-    this.props.setCalendarIndex({
-      phoneNumber: this.phoneNumber,
-      index: searchMessageIndex,
-    });
+    Alert.alert(
+      this.props.calendar.alerts.confirmation,
+      this.props.calendar.alerts.searchBy,
+      [
+        {
+          text: this.props.calendar.alerts.cancel,
+          onPress: () => {
+            console.log('cancel');
+          },
+        },
+        {
+          text: this.props.calendar.alerts.ok,
+          onPress: () => {
+            this.props.setCalendarIndex({
+              phoneNumber: this.phoneNumber,
+              index: searchMessageIndex,
+            });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.calendar',
+                data: this.device.calendar,
+              });
+            }   
+          },
+        },
+      ],
+    );
+   
   }
   verifyLength() {
     if (this.searchIndex == 0 && this.inputSearch.length == 10) return true;
     if (this.searchIndex == 1 && this.inputSearch.length == 3) return true;
     return false;
   }
-
   handleSearchMessage() {
     if (this.inputSearch == '') {
       Toast.show(this.props.calendar.toasts.void);
@@ -113,7 +136,6 @@ class Calendar extends Component {
       }
     }
   }
-
   findDevices() {
     this.device = this.props.devices.filter((device) => {
       if (device.phoneNumber == this.phoneNumber) {
@@ -195,10 +217,11 @@ const mapStateToProps = (state) => {
     theme: state.themes[state.currentTheme],
     calendar: state.screens.settings_calendar[state.currentLanguage],
     devices: state.devices,
+    user:state.login,
   };
 };
 
 const mapDistpatchToProps = {
-  setCalendarIndex,
+  setCalendarIndex,editFb,
 };
 export default connect(mapStateToProps, mapDistpatchToProps)(Calendar);

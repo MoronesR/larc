@@ -1,14 +1,17 @@
-import React from 'react';
-import { StyleSheet, Text, View,Button,TouchableOpacity } from 'react-native';
-import { GoogleSigninButton } from '@react-native-community/google-signin';
+import React, {useState} from 'react';
+import { StyleSheet, Text, View,TouchableOpacity } from 'react-native';
+import {Overlay} from 'react-native-elements';
 import Icon from '../../utils/Icon';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
+import Spinner from 'react-native-spinkit';
 
 const Authentication = (props) => {
-  console.log(props.login_titles);
   return (
     <View style={[styles.container, {backgroundColor: props.theme.header_background}]}>
+      <Overlay isVisible={props.load} overlayStyle={{backgroundColor: props.theme.overlay_background, padding: 20}}>
+        <Spinner type={'Circle'} size={30} color={props.theme.device_list_title}/>
+      </Overlay>
       <View style={[styles.header, {backgroundColor: props.theme.body_background}]}>
         <Icon style={styles.icon} name="logo" width='180' height='180'/>
         {/* <Text style={[styles.welcome,{fontSize: 30, fontWeight: 'bold', color: props.theme.settings_button_group_background_selected}]}>{props.login_titles.welcome}</Text> */}

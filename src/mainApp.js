@@ -11,6 +11,7 @@ import Toast from 'react-native-simple-toast';
 
 const main = (props) =>{
   const [isLoading, setisLoading] = useState(true);
+  const [load, setload] = useState(false);
   useEffect(() => {
     setTimeout(() => {
       setisLoading(false);
@@ -19,12 +20,14 @@ const main = (props) =>{
   //login google or anonymous
   const onGoogleButtonPress = async() => {
     try {
+      setload(true);
       const { idToken } = await firebase.GoogleSignin.signIn();
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       auth().signInWithCredential(googleCredential)
       .then((result) => {
         saveNewUser();
-      }) 
+      });
+      setload(false);
     } catch (error) {
       if (error.code === firebase.statusCodes.SIGN_IN_CANCELLED) {
         console.info('user cancelled the login flow')
@@ -39,7 +42,7 @@ const main = (props) =>{
       }
     }
   }
-  const onAnonymousPress = async() => {
+  const onAnonymousPress = () => {
     {Alert.alert(props.login_titles.anonymous.title, props.login_titles.anonymous.body, [
       {
         text:props.login_titles.anonymous.cancel,
@@ -49,8 +52,9 @@ const main = (props) =>{
       },
       {
         text: props.login_titles.anonymous.ok,
-        onPress: () => {
-           auth()
+        onPress: async () => {
+          setload(true);
+          await auth()
           .signInAnonymously()
           .then(() => {
             console.log('User signed in anonymously');
@@ -58,6 +62,7 @@ const main = (props) =>{
           .catch(error => {
             console.error(error);
           });
+          setload(false);
         },
       },
     ])}
@@ -93,7 +98,7 @@ const main = (props) =>{
     return <SplashScreen />;
   }else{
     if (!props.authenticated) {
-      return <Login onGoogleButtonPress={onGoogleButtonPress} onAnonymousPress={onAnonymousPress}/>;
+      return <Login onGoogleButtonPress={onGoogleButtonPress} load={load} onAnonymousPress={onAnonymousPress}/>;
     }
     return <Drawer/>;
   }

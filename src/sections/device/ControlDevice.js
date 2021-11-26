@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {ButtonGroup} from 'react-native-elements';
 import {connect} from 'react-redux';
-import {setCurrentChannel} from '../../../Actions';
+import {setCurrentChannel, updateFb} from '../../../Actions';
 import Icon from '../../utils/Icon';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import SmsAndroid from 'react-native-get-sms-android';
@@ -30,14 +30,16 @@ class Controll extends Component {
       selectedIndex: null,
     };
   }
-
   updateIndex(selectedIndex) {
-    this.props.setCurrentChannel({
-      currentChannel: selectedIndex + 1,
-      phoneNumber: this.phoneNumber,
-    });
+    if(this.props.state.login.anonymous){
+      this.props.setCurrentChannel({
+        currentChannel: selectedIndex + 1,
+        phoneNumber: this.phoneNumber,
+      });
+    }else{
+      this.props.updateFb({id:this.device.id, data:{'device_default.currentChannel': selectedIndex + 1 }})
+    }    
   }
-
   makeCall() {
     Alert.alert(
       this.props.screen.alert.confirmation,
@@ -218,7 +220,6 @@ class Controll extends Component {
             ]}>
             {this.props.screen.title} :
           </Text>
-
           <ButtonGroup
             onPress={this.updateIndex}
             selectedIndex={this.currentChannel - 1}
@@ -244,6 +245,7 @@ class Controll extends Component {
         </View>
         {/* Device control */}
         <View style={style.deviceControl}>
+          {/* datos principales */}
           <View>
             <View style={style.namesTitles}>
               <Text
@@ -253,7 +255,6 @@ class Controll extends Component {
                 ]}>
                 {this.name}
               </Text>
-
               <Text
                 style={[
                   style.nameChannel,
@@ -270,7 +271,7 @@ class Controll extends Component {
               {this.phoneNumber}
             </Text>
           </View>
-
+          {/* acciones principales */}
           <View style={style.container_icons}>
             <TouchableOpacity
               style={style.container_action_button}
@@ -354,9 +355,11 @@ const mapStateToProps = (state) => {
     theme: state.themes[state.currentTheme],
     screen: state.screens.device_control[state.currentLanguage],
     devices: state.devices,
+    user:state.login,
   };
 };
 const mapDispatchToProps = {
   setCurrentChannel,
+  updateFb
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Controll);

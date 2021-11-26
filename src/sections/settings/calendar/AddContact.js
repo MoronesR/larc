@@ -6,7 +6,7 @@ import React, {useState} from 'react';
 import {Button, Overlay, Input} from 'react-native-elements';
 import {View, Text, StyleSheet, Platform} from 'react-native';
 import {connect} from 'react-redux';
-import {addContact} from '../../../../Actions';
+import {addContact,editFb} from '../../../../Actions';
 import Toast from 'react-native-simple-toast';
 import SmsAndroid from 'react-native-get-sms-android';
 import SendSMS from 'react-native-sms';
@@ -116,7 +116,16 @@ const AddContact = (props) => {
                   phoneNumber: state.input_cellphone,
                   phoneNumberDevice: props.cellphone,
                   id: props.group_id,
+                  position: props.position
                 });
+                // console.log(props.cellphone, props.group_id);
+                if(!props.user.anonymous){
+                  props.editFb({
+                    id: device.id,
+                    rute: 'device_default.calendar',
+                    data: device.calendar,
+                  });
+                }  
                 Platform.OS === 'android' &&
                   sendMessageAndroid(
                     `${prefix}${password}${searchCmd.serial}${state.input_register_number}=${state.input_cellphone}`,
@@ -313,11 +322,12 @@ const mapStateToProps = (state) => {
     screen_general: state.screens.general[state.currentLanguage],
     screen: state.screens.device[state.currentLanguage],
     devices: state.devices,
+    user:state.login,
   };
 };
 
 const mapDispatchToProps = {
-  addContact,
+  addContact,editFb,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddContact);

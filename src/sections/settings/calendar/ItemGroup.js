@@ -4,24 +4,27 @@ import {
   View,
   Text,
   StyleSheet,
-  ToastAndroid,
+  Alert,
 } from 'react-native';
+
 import Icon from '../../../utils/Icon';
 import {connect} from 'react-redux';
-import {deleteGroup} from '../../../../Actions';
+import {deleteGroup,editFb,} from '../../../../Actions';
 import Toast from 'react-native-simple-toast';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 class ItemGroup extends Component {
   constructor() {
     super();
     this.redirect = this.redirect.bind(this);
-    this.deleteGroup = this.deleteGroup.bind(this);
     this.editGroup = this.editGroup.bind(this);
+    this.deleteGroup = this.deleteGroup.bind(this);
   }
   redirect() {
     this.props.navigation.navigate('contactScreen', {
       cellphone: this.props.phoneNumber,
       group_id: this.props.item.id,
+      position: this.props.position
     });
   }
   deleteGroup() {
@@ -47,7 +50,7 @@ class ItemGroup extends Component {
         ]}
         onPress={this.redirect}>
         <View style={style.icon_title_container}>
-          <Icon name="group" width="40" />
+          <FontAwesome5 name={'users'} size={40} style={{color:this.props.theme.device_list_title}}/>
           <Text
             style={[
               style.title,
@@ -58,14 +61,19 @@ class ItemGroup extends Component {
         </View>
         <View style={style.delete_container}>
           {this.props.item.contacts.length == 0 && (
-            <TouchableOpacity onPress={this.deleteGroup}>
-              <Icon name="delete" width="25" />
+            <TouchableOpacity onPress={
+              this.deleteGroup
+             }
+             onPressIn={
+              this.findDevice
+            }>
+               <FontAwesome5 name={'trash'} size={30} style={{color:this.props.theme.device_list_title}}/>
             </TouchableOpacity>
           )}
         </View>
         <View style={style.edit_container}>
           <TouchableOpacity onPress={this.editGroup}>
-            <Icon name="edit" width="25" />
+          <FontAwesome5 name={'edit'} size={30} style={{color:this.props.theme.device_list_title}}/>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -106,8 +114,14 @@ const style = StyleSheet.create({
     paddingLeft: 10,
   },
 });
-
-const mapDistpatchToProps = {
-  deleteGroup,
+const mapStateToProps = (state) => {
+  return {
+    user:state.login,
+    devices: state.devices,
+    calendar: state.screens.settings_calendar[state.currentLanguage],
+  };
 };
-export default connect(null, mapDistpatchToProps)(ItemGroup);
+const mapDistpatchToProps = {
+  deleteGroup,editFb,
+};
+export default connect(mapStateToProps, mapDistpatchToProps)(ItemGroup);

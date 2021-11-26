@@ -3,14 +3,15 @@ import {View, StyleSheet, FlatList, Text} from 'react-native';
 import {connect} from 'react-redux';
 import ItemGroup from './ItemGroup';
 import Separator from '../../../utils/horizontalPaddingSeparator';
-
+//reade
 class ListGroup extends Component {
-  renderItem({item}) {
+  renderItem(item, i) {
     return (
       <ItemGroup
         navigation={this.props.navigation}
         phoneNumber={this.device.phoneNumber}
         item={item}
+        position = {i}
         theme={this.props.theme}
         screen={this.props.device_screen}
         contacts={this.data}
@@ -48,7 +49,7 @@ class ListGroup extends Component {
         <FlatList
           style={style.FlatList}
           data={this.device.calendar.groups}
-          renderItem={this.renderItem.bind(this)}
+          renderItem={({item, index}) => this.renderItem(item, index)}
           keyExtractor={this.keyExtractor}
           ItemSeparatorComponent={this.renderSeparator}
           ListEmptyComponent={this.renderEmptyComponent.bind(this)}

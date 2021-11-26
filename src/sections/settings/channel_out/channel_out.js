@@ -20,6 +20,7 @@ import {
   setFeedBMessage,
   setChannelOutName,
   setCurrentStatus,
+  editFb,
 } from '../../../../Actions';
 import SmsAndroid from 'react-native-get-sms-android';
 import SendSMS from 'react-native-sms';
@@ -38,6 +39,34 @@ class ChannelOut extends Component {
     this.updateOffOnIndex = this.updateOffOnIndex.bind(this);
     this.updateTimeBase = this.updateTimeBase.bind(this);
     this.updateIndex = this.updateIndex.bind(this);
+  }
+  findDevices() {
+    this.device = this.props.devices.filter(
+      (device) => device.phoneNumber == this.phoneNumber,
+    );
+    this.device = this.device[0];
+    this.currentChannel = this.device.currentChannel;
+    this.password = this.device.password;
+    this.channel = this.device.channels[this.device.currentChannel - 1];
+    this.prefix = this.device.prefix;
+    this.currentOnOff = this.channel.configs.channel_out.currentStatus;   
+    this.time = this.channel.configs.channel_out.base_time;
+    this.name = this.channel.configs.channel_out.name;
+    this.activationType = this.channel.configs.channel_out.activation_type; //this remove 
+    this.baseTime = this.channel.configs.channel_out.base_time;
+    this.activationTime = this.channel.configs.channel_out.activation_time;
+    this.placeHolderActivationMessage = this.channel.configs.channel_out.on_off[
+      this.currentOnOff
+    ].activation_message.value;
+    this.ActivationMessageCmd = this.channel.configs.channel_out.on_off[
+      this.currentOnOff
+    ].activation_message.command;
+    this.placeHolderFeedBMessage = this.channel.configs.channel_out.on_off[
+      this.currentOnOff
+    ].feedBMessage.value;
+    this.feedBMessageCmd = this.channel.configs.channel_out.on_off[
+      this.currentOnOff
+    ].feedBMessage.command;
   }
   sendMessageIOS(msg, phone) {
     SendSMS.send(
@@ -71,7 +100,51 @@ class ChannelOut extends Component {
       },
     );
   }
-  // revisaso
+  updateIndex(selectedIndex) {
+    this.props.setCurrentChannel({
+      currentChannel: selectedIndex + 1,
+      phoneNumber: this.phoneNumber,
+    });
+    if(!this.props.user.anonymous){
+      this.props.editFb({
+        id: this.device.id,
+        rute: 'device_default.currentChannel',
+        data: selectedIndex + 1,
+      });
+    }   
+
+  }
+  handleChannelNameChange() {
+    Alert.alert(
+      this.props.screen_settings_out.alerts.confirmation,
+      this.props.screen_settings_out.alerts.change_name,
+      [
+        {
+          text: this.props.screen_settings_out.alerts.cancel,
+          onPress: () => {
+            console.log('cancel');
+          },
+        },
+        {
+          text: this.props.screen_settings_out.alerts.ok,
+          onPress: () => {
+            this.props.setChannelOutName({
+              phoneNumber: this.phoneNumber,
+              value: this.currentChannel,
+              name: this.channel_name_input,
+            });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.channels',
+                data: this.device.channels,
+              });
+            }   
+          },
+        },
+      ],
+    );
+  }
   updateTimeBase(timeBaseIndex) {
     const cmds = [this.time.minutes, this.time.seconds, this.time.milliseconds];
     Alert.alert(
@@ -102,83 +175,82 @@ class ChannelOut extends Component {
               value: this.currentChannel,
               index: timeBaseIndex,
             });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.channels',
+                data: this.device.channels,
+              });
+            }  
           },
         },
       ],
       {cancelable: true},
     );
   }
-  updateIndex(selectedIndex) {
-    this.props.setCurrentChannel({
-      currentChannel: selectedIndex + 1,
-      phoneNumber: this.phoneNumber,
-    });
-  }
-  updateOffOnIndex(OffOnIndex) {
-    this.props.setCurrentStatus({
-      phoneNumber: this.phoneNumber,
-      value: this.currentChannel,
-      currentStatus: OffOnIndex,
-    });
-  }
-  findDevices() {
-    this.device = this.props.devices.filter(
-      (device) => device.phoneNumber == this.phoneNumber,
-    );
-    this.device = this.device[0];
-    this.currentChannel = this.device.currentChannel;
-    this.password = this.device.password;
-    this.channel = this.device.channels[this.device.currentChannel - 1];
-    this.prefix = this.device.prefix;
-    this.currentOnOff = this.channel.configs.channel_out.currentStatus;   
-    this.time = this.channel.configs.channel_out.base_time;
-    this.name = this.channel.configs.channel_out.name;
-    this.activationType = this.channel.configs.channel_out.activation_type; //this remove 
-    this.baseTime = this.channel.configs.channel_out.base_time;
-    this.activationTime = this.channel.configs.channel_out.activation_time;
-    this.placeHolderActivationMessage = this.channel.configs.channel_out.on_off[
-      this.currentOnOff
-    ].activation_message.value;
-    this.ActivationMessageCmd = this.channel.configs.channel_out.on_off[
-      this.currentOnOff
-    ].activation_message.command;
-    this.placeHolderFeedBMessage = this.channel.configs.channel_out.on_off[
-      this.currentOnOff
-    ].feedBMessage.value;
-    this.feedBMessageCmd = this.channel.configs.channel_out.on_off[
-      this.currentOnOff
-    ].feedBMessage.command;
-  }
-  handleChannelNameChange() {
+  handleActivationTimeChange() {
     Alert.alert(
       this.props.screen_settings_out.alerts.confirmation,
-      this.props.screen_settings_out.alerts.change_name,
+      this.props.screen_settings_out.alerts.change_activationTime,
       [
         {
           text: this.props.screen_settings_out.alerts.cancel,
           onPress: () => {
-            console.log('cancel');
+            console.log('Canceled');
           },
         },
         {
           text: this.props.screen_settings_out.alerts.ok,
           onPress: () => {
-            this.props.setChannelOutName({
+            this.props.setActivationTime({
               phoneNumber: this.phoneNumber,
               value: this.currentChannel,
-              name: this.channel_name_input,
+              activation_time: this.activation_time_input,
             });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.channels',
+                data: this.device.channels,
+              });
+            }  
           },
         },
       ],
-    );
+      {cancelable: true},
+    ); 
   }
-  handleActivationTimeChange() {
-    this.props.setActivationTime({
-      phoneNumber: this.phoneNumber,
-      value: this.currentChannel,
-      activation_time: this.activation_time_input,
-    });
+  updateOffOnIndex(OffOnIndex) {
+    Alert.alert(
+      this.props.screen_settings_out.alerts.confirmation,
+      this.props.screen_settings_out.alerts.change_commandMessage,
+      [
+        {
+          text: this.props.screen_settings_out.alerts.cancel,
+          onPress: () => {
+            console.log('Canceled');
+          },
+        },
+        {
+          text: this.props.screen_settings_out.alerts.ok,
+          onPress: () => {
+            this.props.setCurrentStatus({
+              phoneNumber: this.phoneNumber,
+              value: this.currentChannel,
+              currentStatus: OffOnIndex,
+            });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.channels',
+                data: this.device.channels,
+              });
+            }
+          },
+        },
+      ],
+      {cancelable: true},
+    );    
   }
   handleActivationSmsChange() {
     Alert.alert(
@@ -200,6 +272,14 @@ class ChannelOut extends Component {
               currentStatus: this.currentOnOff,
               activation_message: this.activation_message_input,
             });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.channels',
+                data: this.device.channels,
+              });
+            }   
+
             Platform.OS === 'ios' &&
               this.sendMessageIOS(
                 `${this.prefix}${this.password}#OUT${this.currentChannel}${this.ActivationMessageCmd}${this.activation_message_input}`,
@@ -235,6 +315,13 @@ class ChannelOut extends Component {
               currentStatus: this.currentOnOff,
               feedBMessage: this.feedBMessageInput,
             });
+            if(!this.props.user.anonymous){
+              this.props.editFb({
+                id: this.device.id,
+                rute: 'device_default.channels',
+                data: this.device.channels,
+              });
+            }   
             Platform.OS === 'ios' &&
               this.sendMessageIOS(
                 `${this.prefix}${this.password}#OUT${this.currentChannel}${this.feedBMessageCmd}${this.feedBMessageInput}`,
@@ -250,7 +337,6 @@ class ChannelOut extends Component {
       ],
     );
   }
-
   render() {
     this.phoneNumber = this.props.route.params.cellphone;
     this.findDevices();
@@ -397,17 +483,15 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
 const mapStateToProps = (state) => {
   return {
     theme: state.themes[state.currentTheme],
-    screen_settings_out:
-      state.screens.settings_channel_out[state.currentLanguage],
+    screen_settings_out:state.screens.settings_channel_out[state.currentLanguage],
     screen_channel: state.screens.device_control[state.currentLanguage],
     devices: state.devices,
+    user:state.login,
   };
 };
-
 const mapDispatchToProps = {
   setCurrentChannel,
   setActivationType,
@@ -417,6 +501,6 @@ const mapDispatchToProps = {
   setFeedBMessage,
   setChannelOutName,
   setCurrentStatus,
+  editFb,
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelOut);
